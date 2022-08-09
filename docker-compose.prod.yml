@@ -1,8 +1,26 @@
 version: "3.8"
 services:
  app:
-  image: eva:0.1.2
-  restart: unless-stopped
-  env_file: .env
+  image: eva:0.0.9
+  depends_on:
+   - db
   ports:
-   - ${PORT}:3000
+   - ${PORT_PROD}:3000
+  environment:
+   - NODE_ENV=prod
+  env_file: .env
+
+ db:
+  image: postgres:14.4
+  restart: unless-stopped
+  environment: 
+   POSTGRES_USER: ${PG_USER_PROD}
+   POSTGRES_PASSWORD: ${PG_PASS_PROD}
+   POSTGRES_DB: ${PG_DB_PROD}
+  ports:
+   - ${PG_PORT_PROD}:5432
+  volumes:
+   - psql_volume:/var/lib/postgresql/data
+
+volumes:
+ psql_volume:

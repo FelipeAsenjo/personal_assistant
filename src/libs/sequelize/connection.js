@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize')
+const setupModels = require('./models')
 
 const {
   dbUser,
@@ -6,25 +7,30 @@ const {
   dbName,
   dbHost,
   dialect
-} = require('../../config/config').db
+} = require('../../config').db
 
-const db = new Sequelize(dbName, dbUser, dbPassword, {
+const DB_USER = encodeURIComponent(dbUser)
+const DB_PASS = encodeURIComponent(dbPassword)
+
+const sequelize = new Sequelize(dbName, DB_USER, DB_PASS, {
   host: dbHost,
   dialect
 })
 
+setupModels(sequelize)
+
+// sequelize.sync({ alter: true })
         
 const dbConnection = async () => {
-        
   try { 
-      
-    await db.authenticate()                                                                 
+    await sequelize.authenticate()                                                                 
     console.log('Database connected')                                                        
-                                                                                            
   } catch( err ) {
     throw new Error( err )
   }
-      
 }
 
-module.exports = dbConnection
+module.exports = {
+  dbConnection,
+  sequelize
+}

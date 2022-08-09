@@ -6,7 +6,9 @@ services:
   depends_on:
    - db
   ports:
-   - ${PORT}:3000
+   - ${PORT_DEV}:3000
+  environment:
+   - NODE_ENV=dev
   env_file: .env
   volumes:
    - .:/usr/src
@@ -16,11 +18,11 @@ services:
   image: postgres:14.4
   restart: unless-stopped
   environment: 
-   POSTGRES_USER: ${POSTGRES_USER}
-   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-   POSTGRES_DB: ${POSTGRES_DB}
+   POSTGRES_USER: ${PG_USER_DEV}
+   POSTGRES_PASSWORD: ${PG_PASS_DEV}
+   POSTGRES_DB: ${PG_DB_DEV}
   ports:
-   - ${POSTGRES_PORT}:5432
+   - ${PG_PORT_DEV}:5432
   volumes:
    - psql_volume:/var/lib/postgresql/data
 
