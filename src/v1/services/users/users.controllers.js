@@ -15,9 +15,8 @@ class UserController {
 
     async findAll(req, res, next) {
         try {
-            res.send('estamos bien perejil')
-            // const users = await service.findAll()
-            // res.json(users)
+            const users = await service.findAll()
+            res.json(users)
         } catch(error) {
             next(error)
         }
@@ -37,7 +36,7 @@ class UserController {
         try {
             const { id } = req.params
             const body = req.body
-            const user = await service.update(id, body)
+            const user = await service.updateOne(id, body)
             res.json(user)
         } catch(error) {
             next(error)
@@ -47,7 +46,7 @@ class UserController {
     async deleteOne(req, res, next) {
         try {
             const { id } = req.params
-            await service.delete(id)
+            await service.deleteOne(id)
             res.status(201).json({ id })
         } catch(error) {
             next(error)

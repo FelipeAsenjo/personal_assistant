@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize')
-const setupModels = require('./models')
+
+const setupModels = require('../sequelize/models')
 
 const {
   dbUser,
@@ -19,8 +20,8 @@ const sequelize = new Sequelize(dbName, DB_USER, DB_PASS, {
 
 setupModels(sequelize)
 
-// sequelize.sync({ alter: true })
-        
+// sequelize.sync({alter: true})
+
 const dbConnection = async () => {
   try { 
     await sequelize.authenticate()                                                                 

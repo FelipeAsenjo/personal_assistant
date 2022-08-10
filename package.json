@@ -7,7 +7,13 @@
     "start": "NODE_ENV=prod node ./src/index.js",
     "dev": "docker-compose up",
     "build": "docker-compose build",
-    "test": "NODE_ENV=test jest --verbose --silent"
+    "test": "NODE_ENV=test jest --verbose --silent",
+    "migration:generate": "sequelize-cli migration:generate --name",
+    "migration:run": "sequelize-cli db:migrate",
+    "migration:undo": "sequelize-cli db:migrate:undo",
+    "seed:generate": "sequelize-cli seed:generate",
+    "seed:run": "sequelize-cli db:seed",
+    "seed:undo": "sequelize-cli db:seed:undo"
   },
   "repository": "git@github.com:FelipeAsenjo/eva.git",
   "author": "Felipe Asenjo <felipe.asenjo2@gmail.com>",

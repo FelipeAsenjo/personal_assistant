@@ -2,32 +2,38 @@ const {
   dbUser,
   dbPassword,
   dbName,
-  dbHost 
-} = require('../../config').db
+  dbHost,
+  dbPort,
+  dialect
+ } = require('../../config').db
+ console.log(dbPassword)
 
 const USER = encodeURIComponent(dbUser)
 const PASS = encodeURIComponent(dbPassword)
 
 module.exports = {
-  "development": {
-    "username": USER,
-    "password": PASS,
-    "database": dbName,
-    "host": dbHost,
-    "dialect": "postgres"
+  development: {
+    username: dbUser,
+    password: dbPassword,
+    database: dbName,
+    host: 'localhost',
+    port: dbPort,
+    dialect: dialect
   },
-  "test": {
-    "username": USER,
-    "password": PASS,
-    "database": dbName,
-    "host": dbHost,
-    "dialect": "postgres"
+  test: {
+    username: USER,
+    password: PASS,
+    database: dbName,
+    host: 'localhost',
+    port: dbPort,
+    dialect: dialect
   },
-  "production": {
-    "username": USER,
-    "password": PASS,
-    "database": dbName,
-    "host": dbHost,
-    "dialect": "postgres"
+  production: {
+    username: USER,
+    password: PASS,
+    database: dbName,
+    // host: dbHost,
+    port: dbPort,
+    dialect: dialect
   }
 }
