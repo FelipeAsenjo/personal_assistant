@@ -4,28 +4,35 @@ const USER_TABLE = 'users'
 
 const UserSchema = {
   id: {
+    primaryKey: true,
     allowNull: false,
+    unique: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
   },
-  name: {
-    type: DataTypes.STRING
-  },
-  last_name: {
-    type: DataTypes.STRING
-  },
+  name: DataTypes.STRING(50),
+  last_name: DataTypes.STRING(50),
   email: {
-    allowNull: false,
-    type: DataTypes.STRING,
-    unique: true
+    type: DataTypes.STRING(50),
+    unique: true,
+    allowNull: false
   },
   password: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING(255)
   },
   role: {
-    type: DataTypes.STRING
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 4
+  },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE
+  },
+  updatedAt: {
+    allowNull: false,
+    type: Sequelize.DATE
   }
 }
 
@@ -39,6 +46,7 @@ class User extends Model {
       sequelize,
       tableName: USER_TABLE,
       modelName: 'User',
+      timestamps: true,
     }
   }
 }

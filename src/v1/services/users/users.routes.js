@@ -10,7 +10,9 @@ const {
 const router = express.Router()
 const controller = new UserController()
 
-router.get('/', controller.findAll)
+router.get('/', 
+    controller.findAll
+)
 
 router.get('/:id',
     validatorHandler(getUserSchema, 'params'),
