@@ -1,8 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize')
 
-const USER_TABLE = 'users'
+const WISHLIST_TABLE = 'wishlist'
 
-const UserSchema = {
+const WishlistSchema = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -14,19 +14,28 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.UUID
   },
-  username: {
+  item_name: {
     allowNull: false,
-    unique: true,
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100)
   },
-  password: {
+  description: DataTypes.STRING,
+  brand: DataTypes.STRING(30),
+  model: DataTypes.STRING(30),
+  specs: DataTypes.STRING,
+  done: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   },
-  role: {
-    type: DataTypes.ENUM([0, 1, 2, 3, 4, 5]),
+  done: {
     allowNull: false,
-    defaultValue: 4
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  favorite: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   },
   createdAt: {
     allowNull: false,
@@ -38,7 +47,7 @@ const UserSchema = {
   }
 }
 
-class User extends Model {
+class Wishlist extends Model {
   static associate(models) {
     // create relations
   }
@@ -46,12 +55,12 @@ class User extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: USER_TABLE,
-      modelName: 'User',
+      tableName: WISHLIST_TABLE,
+      modelName: 'Wishlist',
       timestamps: true,
       paranoid: true,
     }
   }
 }
 
-module.exports = { USER_TABLE, UserSchema, User }
+module.exports = { WISHLIST_TABLE, WishlistSchema, Wishlist }

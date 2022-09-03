@@ -1,8 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize')
 
-const USER_TABLE = 'users'
+const CONTACT_TABLE = 'contacts'
 
-const UserSchema = {
+const ContactSchema = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -14,23 +14,15 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.UUID
   },
-  username: {
+  favorite: {
     allowNull: false,
-    unique: true,
-    type: DataTypes.STRING(50),
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
-  password: {
+  blocked: {
     allowNull: false,
-    type: DataTypes.STRING
-  },
-  role: {
-    type: DataTypes.ENUM([0, 1, 2, 3, 4, 5]),
-    allowNull: false,
-    defaultValue: 4
-  },
-  createdAt: {
-    allowNull: false,
-    type: Sequelize.DATE
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
   updatedAt: {
     allowNull: false,
@@ -38,7 +30,7 @@ const UserSchema = {
   }
 }
 
-class User extends Model {
+class Contact extends Model {
   static associate(models) {
     // create relations
   }
@@ -46,12 +38,13 @@ class User extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: USER_TABLE,
-      modelName: 'User',
+      tableName: CONTACT_TABLE,
+      modelName: 'Contact',
       timestamps: true,
+      createdAt: false,
       paranoid: true,
     }
   }
 }
 
-module.exports = { USER_TABLE, UserSchema, User }
+module.exports = { CONTACT_TABLE, ContactSchema, Contact }

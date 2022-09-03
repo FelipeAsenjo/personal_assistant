@@ -1,8 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize')
 
-const USER_TABLE = 'users'
+const INVENTORY_TABLE = 'inventory'
 
-const UserSchema = {
+const InventorySchema = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -14,19 +14,21 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.UUID
   },
-  username: {
+  item_name: {
     allowNull: false,
-    unique: true,
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100) 
   },
-  password: {
+  description: DataTypes.STRING,
+  docs: DataTypes.STRING,
+  is_software: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
-  role: {
-    type: DataTypes.ENUM([0, 1, 2, 3, 4, 5]),
+  is_for_sale: {
     allowNull: false,
-    defaultValue: 4
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
   createdAt: {
     allowNull: false,
@@ -38,7 +40,7 @@ const UserSchema = {
   }
 }
 
-class User extends Model {
+class Inventory extends Model {
   static associate(models) {
     // create relations
   }
@@ -46,12 +48,12 @@ class User extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: USER_TABLE,
-      modelName: 'User',
+      tableName: INVENTORY_TABLE,
+      modelName: 'Inventory',
       timestamps: true,
       paranoid: true,
     }
   }
 }
 
-module.exports = { USER_TABLE, UserSchema, User }
+module.exports = { INVENTORY_TABLE, InventorySchema, Inventory }
