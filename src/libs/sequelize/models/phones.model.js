@@ -34,6 +34,11 @@ class Phone extends Model {
       tableName: PHONE_TABLE,
       modelName: 'Phone',
       paranoid: true,
+      indexes: [
+        {
+          fields: ['number']
+        }
+      ]
     }
   }
 }

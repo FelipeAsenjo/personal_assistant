@@ -63,6 +63,11 @@ class Transfer extends Model {
       modelName: 'Transfer',
       timestamps: true,
       paranoid: true,
+      indexes: [
+        {
+          fields: ['from_account_id', 'to_account_id']
+        }
+      ]
     }
   }
 }

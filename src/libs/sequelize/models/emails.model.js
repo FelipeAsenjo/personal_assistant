@@ -33,6 +33,11 @@ class Email extends Model {
       tableName: EMAIL_TABLE,
       modelName: 'Email',
       paranoid: true,
+      indexes: [
+        {
+          fields: ['address']
+        }
+      ]
     }
   }
 }

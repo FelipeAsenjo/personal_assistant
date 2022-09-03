@@ -41,6 +41,11 @@ class Vehicle extends Model {
       tableName: VEHICLE_TABLE,
       modelName: 'Vehicle',
       paranoid: true,
+      indexes: [
+        {
+          fields: ['plate_number']
+        }
+      ]
     }
   }
 }

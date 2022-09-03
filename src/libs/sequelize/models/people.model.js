@@ -47,6 +47,11 @@ class Person extends Model {
       modelName: 'Person',
       timestamps: true,
       paranoid: true,
+      indexes: [
+        {
+          fields: ['alias', 'name', 'last_name', 'rut']
+        }
+      ]
     }
   }
 }

@@ -38,6 +38,11 @@ class SocialMedia extends Model {
       tableName: SOCIAL_MEDIA_TABLE,
       modelName: 'SocialMedia',
       paranoid: true,
+      indexes: [
+        {
+          fields: ['account_name']
+        }
+      ]
     }
   }
 }

@@ -49,6 +49,11 @@ class BankAccount extends Model {
       tableName: BANK_ACCOUNT_TABLE,
       modelName: 'BankAccount',
       paranoid: true,
+      indexes: [
+        {
+          fields: ['account_number']
+        }
+      ]
     }
   }
 }
