@@ -40,7 +40,13 @@ const UserSchema = {
 
 class User extends Model {
   static associate(models) {
-    // create relations
+    this.hasMany(models.Contact, { as: 'contacts', foreignKey: 'user_id' })
+    this.hasMany(models.Task, { as: 'tasks', foreignKey: 'user_id' })
+    this.hasMany(models.Wishlist, { as: 'wishes', foreignKey: 'user_id' })
+    this.hasMany(models.Inventory, { as: 'inventory', foreignKey: 'user_id' })
+    this.hasMany(models.Project, { as: 'projects', foreignKey: 'user_id' })
+
+    this.belongsTo(models.Person, { as: 'owner' })
   }
 
   static config(sequelize) {

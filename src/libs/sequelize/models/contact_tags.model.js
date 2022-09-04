@@ -26,7 +26,11 @@ const ContactTagsSchema = {
 
 class ContactTags extends Model {
   static associate(models) {
-    // create relations
+    this.belongsToMany(models.ContactTags, {
+      through: 'contact_tags_junction',
+      foreignKey: 'contact_tags_id',
+      otherKey: 'contact_id'
+    })
   }
 
   static config(sequelize) {

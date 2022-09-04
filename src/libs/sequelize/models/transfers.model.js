@@ -53,7 +53,7 @@ const TransferSchema = {
 
 class Transfer extends Model {
   static associate(models) {
-    // create relations
+    this.belongsTo(models.BankAccount, { as: 'from_account' })
   }
 
   static config(sequelize) {

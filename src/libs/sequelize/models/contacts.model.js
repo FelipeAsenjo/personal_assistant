@@ -10,7 +10,11 @@ const ContactSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  owner_id: {
+  person_id: {
+    allowNull: false,
+    type: DataTypes.UUID
+  },
+  user_id: {
     allowNull: false,
     type: DataTypes.UUID
   },
@@ -32,7 +36,14 @@ const ContactSchema = {
 
 class Contact extends Model {
   static associate(models) {
-    // create relations
+    this.belongsTo(models.Person, { as: 'person' })
+    this.belongsTo(models.User, { as: 'owner' })
+
+    this.belongsToMany(models.ContactTags, {
+      through: 'contact_tags_junction',
+      foreignKey: 'contact_id',
+      otherKey: 'contact_tags_id'
+    })
   }
 
   static config(sequelize) {

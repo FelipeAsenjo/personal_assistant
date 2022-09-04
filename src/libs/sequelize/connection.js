@@ -20,6 +20,9 @@ const sequelize = new Sequelize(dbName, DB_USER, DB_PASS, {
 
 setupModels(sequelize)
 
+//dev pourposes
+sequelize.sync({ alter: true })
+
 const dbConnection = async () => {
   try { 
     await sequelize.authenticate()                                                                 

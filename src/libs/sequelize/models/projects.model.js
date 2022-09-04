@@ -1,8 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize')
 
-const INVENTORY_TABLE = 'inventory'
+const PROJECT_TABLE = 'projects'
 
-const InventorySchema = {
+const ProjectSchema = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -14,22 +14,12 @@ const InventorySchema = {
     allowNull: false,
     type: DataTypes.UUID
   },
-  item_name: {
+  title: {
     allowNull: false,
-    type: DataTypes.STRING(100) 
+    type: DataTypes.STRING(100),
   },
   description: DataTypes.STRING,
-  docs: DataTypes.STRING,
-  is_software: {
-    allowNull: false,
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  is_for_sale: {
-    allowNull: false,
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
+  thoughts: DataTypes.STRING,
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -40,20 +30,22 @@ const InventorySchema = {
   }
 }
 
-class Inventory extends Model {
+class Project extends Model {
   static associate(models) {
+    this.hasMany(models.ProjectResources, { as: 'resources', foreignKey: 'project_id' })
+    this.hasMany(models.Task, { as: 'tasks', foreignKey: 'project_id' })
     this.belongsTo(models.User, { as: 'owner' })
   }
 
   static config(sequelize) {
     return {
       sequelize,
-      tableName: INVENTORY_TABLE,
-      modelName: 'Inventory',
+      tableName: PROJECT_TABLE,
+      modelName: 'Project',
       timestamps: true,
       paranoid: true,
     }
   }
 }
 
-module.exports = { INVENTORY_TABLE, InventorySchema, Inventory }
+module.exports = { PROJECT_TABLE, ProjectSchema, Project }

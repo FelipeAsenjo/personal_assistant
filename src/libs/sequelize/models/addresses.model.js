@@ -34,7 +34,11 @@ const AddressSchema = {
 
 class Address extends Model {
   static associate(models) {
-    // create relations
+    this.belongsToMany(models.Person, {
+      through: 'owner_address',
+      foreignKey: 'address_id',
+      otherKey: 'owner_id'
+    })
   }
 
   static config(sequelize) {

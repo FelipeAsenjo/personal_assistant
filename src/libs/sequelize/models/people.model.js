@@ -37,7 +37,23 @@ const PersonSchema = {
 
 class Person extends Model {
   static associate(models) {
-    // create relations
+    this.hasOne(models.User, { as: 'user', foreignKey: 'user_id' })
+    this.hasOne(models.Contact, { as: 'contact', foreignKey: 'person_id' })
+    this.hasMany(models.Phone, { as: 'phone', foreignKey: 'owner_id' })
+    this.hasMany(models.SocialMedia, { as: 'social_media', foreignKey: 'owner_id' })
+    this.hasMany(models.Email, { as: 'email', foreignKey: 'owner_id' })
+    this.hasMany(models.BankAccount, { as: 'bank_account', foreignKey: 'owner_id' })
+
+    this.belongsToMany(models.Vehicle, { 
+      through: 'owner_vehicles',
+      foreignKey: 'owner_id',
+      otherKey: 'vehicle_id'
+    })
+    this.belongsToMany(models.Address, { 
+      through: 'owner_address',
+      foreignKey: 'owner_id',
+      otherKey: 'address_id'
+    })
   }
 
   static config(sequelize) {

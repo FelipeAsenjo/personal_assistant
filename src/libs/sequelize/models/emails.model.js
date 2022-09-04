@@ -24,7 +24,7 @@ const EmailSchema = {
 
 class Email extends Model {
   static associate(models) {
-    // create relations
+    this.belongsTo(models.Person, { as: 'owner' })
   }
 
   static config(sequelize) {

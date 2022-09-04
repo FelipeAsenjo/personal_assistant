@@ -26,7 +26,11 @@ const WishlistTagSchema = {
 
 class WishlistTag extends Model {
   static associate(models) {
-    // create relations
+    this.belongsToMany(models.WishlistTag, {
+      through: 'wishlist_tags_junction',
+      foreignKey: 'wishlist_tags_id',
+      otherKey: 'wishlist_id'
+    })
   }
 
   static config(sequelize) {

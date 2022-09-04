@@ -29,7 +29,7 @@ const SocialMediaSchema = {
 
 class SocialMedia extends Model {
   static associate(models) {
-    // create relations
+    this.belongsTo(models.Person, { as: 'owner' })
   }
 
   static config(sequelize) {

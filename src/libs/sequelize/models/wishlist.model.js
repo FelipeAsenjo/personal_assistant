@@ -10,7 +10,7 @@ const WishlistSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  owner_id: {
+  user_id: {
     allowNull: false,
     type: DataTypes.UUID
   },
@@ -49,7 +49,13 @@ const WishlistSchema = {
 
 class Wishlist extends Model {
   static associate(models) {
-    // create relations
+    this.belongsTo(models.User, { as: 'owner' })
+
+    this.belongsToMany(models.WishlistTag, {
+      through: 'wishlist_tags_junction',
+      foreignKey: 'wishlist_id',
+      otherKey: 'wishlist_tags_id'
+    })
   }
 
   static config(sequelize) {
