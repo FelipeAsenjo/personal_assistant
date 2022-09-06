@@ -40,7 +40,7 @@ const BankAccountSchema = {
 
 class BankAccount extends Model {
   static associate(models) {
-    this.hasMany(models.Trasnfer, { as: 'transfers', foreignKey: 'from_account_id' })
+    this.hasMany(models.Transfer, { as: 'transfers', foreignKey: 'from_account_id' })
     this.belongsTo(models.Person, { as: 'owner' })
   }
 

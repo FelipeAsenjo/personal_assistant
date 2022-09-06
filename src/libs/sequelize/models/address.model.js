@@ -35,7 +35,7 @@ const AddressSchema = {
 class Address extends Model {
   static associate(models) {
     this.belongsToMany(models.Person, {
-      through: 'owner_address',
+      through: models.OwnerAddressJunction,
       foreignKey: 'address_id',
       otherKey: 'owner_id'
     })

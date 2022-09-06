@@ -1,8 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize')
 
-const CONTACT_TAGS_TABLE = 'contact_tags'
+const CONTACT_TAG_TABLE = 'contact_tags'
 
-const ContactTagsSchema = {
+const ContactTagSchema = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -24,11 +24,12 @@ const ContactTagsSchema = {
   }
 }
 
-class ContactTags extends Model {
+class ContactTag extends Model {
   static associate(models) {
-    this.belongsToMany(models.ContactTags, {
-      through: 'contact_tags_junction',
-      foreignKey: 'contact_tags_id',
+
+    this.belongsToMany(models.Contact, {
+      through: models.ContactsTagsJunction,
+      foreignKey: 'tag_id',
       otherKey: 'contact_id'
     })
   }
@@ -36,11 +37,11 @@ class ContactTags extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: CONTACT_TAGS_TABLE,
-      modelName: 'ContactTags',
+      tableName: CONTACT_TAG_TABLE,
+      modelName: 'ContactTag',
       paranoid: true,
     }
   }
 }
 
-module.exports = { CONTACT_TAGS_TABLE, ContactTagsSchema, ContactTags }
+module.exports = { CONTACT_TAG_TABLE, ContactTagSchema, ContactTag }

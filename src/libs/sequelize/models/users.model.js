@@ -24,9 +24,9 @@ const UserSchema = {
     type: DataTypes.STRING
   },
   role: {
-    type: DataTypes.ENUM([0, 1, 2, 3, 4, 5]),
+    type: DataTypes.ENUM(['0', '1', '2', '3', '4', '5']),
     allowNull: false,
-    defaultValue: 4
+    defaultValue: '4'
   },
   createdAt: {
     allowNull: false,

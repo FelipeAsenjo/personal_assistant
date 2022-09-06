@@ -2,7 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize')
 
 const TASK_TAG_TABLE = 'task_tags'
 
-const TaskTagsSchema = {
+const TaskTagSchema = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -24,11 +24,11 @@ const TaskTagsSchema = {
   }
 }
 
-class TaskTags extends Model {
+class TaskTag extends Model {
   static associate(models) {
-    this.belongsToMany(models.TaskTags, {
-      through: 'task_tags_junction',
-      foreignKey: 'task_tags_id',
+    this.belongsToMany(models.Task, {
+      through: models.TaskTagJunction,
+      foreignKey: 'tag_id',
       otherKey: 'task_id'
     })
   }
@@ -37,10 +37,10 @@ class TaskTags extends Model {
     return {
       sequelize,
       tableName: TASK_TAG_TABLE,
-      modelName: 'TaskTags',
+      modelName: 'TaskTag',
       paranoid: true,
     }
   }
 }
 
-module.exports = { TASK_TAG_TABLE, TaskTagsSchema, TaskTags }
+module.exports = { TASK_TAG_TABLE, TaskTagSchema, TaskTag }

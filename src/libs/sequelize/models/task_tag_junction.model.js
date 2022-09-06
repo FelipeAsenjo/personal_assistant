@@ -10,11 +10,11 @@ const TaskTagJunctionSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  owner_id: {
+  task_id: {
     allowNull: false,
     type: DataTypes.UUID
   },
-  task_id: {
+  tag_id: {
     allowNull: false,
     type: DataTypes.UUID
   },

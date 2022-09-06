@@ -39,10 +39,12 @@ class Contact extends Model {
     this.belongsTo(models.Person, { as: 'person' })
     this.belongsTo(models.User, { as: 'owner' })
 
-    this.belongsToMany(models.ContactTags, {
-      through: 'contact_tags_junction',
+    // this.hasMany(models.ContactTagJunction, { as: 'tags', foreignKey: 'contact_id' })
+
+    this.belongsToMany(models.ContactTag, {
+      through: models.ContactsTagsJunction,
       foreignKey: 'contact_id',
-      otherKey: 'contact_tags_id'
+      otherKey: 'tag_id'
     })
   }
 

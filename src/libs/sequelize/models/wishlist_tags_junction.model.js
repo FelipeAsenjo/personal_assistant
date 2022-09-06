@@ -10,11 +10,11 @@ const WishlistTagJunctionSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  owner_id: {
+  wishlist_id: {
     allowNull: false,
     type: DataTypes.UUID
   },
-  wishlist_id: {
+  tag_id: {
     allowNull: false,
     type: DataTypes.UUID
   },

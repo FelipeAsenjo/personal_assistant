@@ -2,7 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize')
 
 const CONTACTS_TAGS_JUNCTION_TABLE = 'contacts_tags_junction'
 
-const ContactsTagsJunctionSchema = {
+const ContactTagJunctionSchema = {
   id: {
     primaryKey: true,
     allowNull: false,
@@ -14,13 +14,13 @@ const ContactsTagsJunctionSchema = {
     allowNull: false,
     type: DataTypes.UUID
   },
-  contact_tag_id: {
+  tag_id: {
     allowNull: false,
     type: DataTypes.UUID
   }
 }
 
-class ContactsTagsJunction extends Model {
+class ContactTagJunction extends Model {
   static associate(models) {
     // create relations
   }
@@ -29,10 +29,10 @@ class ContactsTagsJunction extends Model {
     return {
       sequelize,
       tableName: CONTACTS_TAGS_JUNCTION_TABLE,
-      modelName: 'ContactsTagsJunction',
+      modelName: 'ContactTagJunction',
       paranoid: true,
     }
   }
 }
 
-module.exports = { CONTACTS_TAGS_JUNCTION_TABLE, ContactsTagsJunctionSchema, ContactsTagsJunction }
+module.exports = { CONTACTS_TAGS_JUNCTION_TABLE, ContactTagJunctionSchema, ContactTagJunction }

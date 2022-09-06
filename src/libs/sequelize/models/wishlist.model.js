@@ -52,9 +52,9 @@ class Wishlist extends Model {
     this.belongsTo(models.User, { as: 'owner' })
 
     this.belongsToMany(models.WishlistTag, {
-      through: 'wishlist_tags_junction',
+      through: models.WishlistTagJunction,
       foreignKey: 'wishlist_id',
-      otherKey: 'wishlist_tags_id'
+      otherKey: 'tag_id'
     })
   }
 

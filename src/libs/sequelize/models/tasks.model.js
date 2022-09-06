@@ -61,10 +61,10 @@ class Task extends Model {
     this.belongsTo(models.User, { as: 'owner' })
     this.belongsTo(models.Project, { as: 'project' })
 
-    this.belongsToMany(models.TaskTags, {
-      through: 'task_tags_junction',
+    this.belongsToMany(models.TaskTag, {
+      through: models.TaskTagJunction,
       foreignKey: 'task_id',
-      otherKey: 'task_tags_id'
+      otherKey: 'tag_id'
     })
   }
 

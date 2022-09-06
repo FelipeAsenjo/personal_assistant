@@ -45,12 +45,12 @@ class Person extends Model {
     this.hasMany(models.BankAccount, { as: 'bank_account', foreignKey: 'owner_id' })
 
     this.belongsToMany(models.Vehicle, { 
-      through: 'owner_vehicles',
+      through: models.OwnerVehicleJunction,
       foreignKey: 'owner_id',
       otherKey: 'vehicle_id'
     })
     this.belongsToMany(models.Address, { 
-      through: 'owner_address',
+      through: models.OwnerAddressJunction,
       foreignKey: 'owner_id',
       otherKey: 'address_id'
     })
