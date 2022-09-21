@@ -8,7 +8,7 @@ class UserController {
     async create(req, res, next) {
         const { body } = req
         try {
-            const userExist = await service.findByEmail(body.email)
+            const userExist = await service.findByUsername(body.username)
             if(userExist) throw boom.conflict('user already exist')
 
             body.password = encryptPass(body.password)

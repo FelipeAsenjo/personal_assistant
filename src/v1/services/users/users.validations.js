@@ -1,26 +1,33 @@
 const Joi = require('joi')
 
 const id = Joi.string().guid()
-const name = Joi.string()
-const last_name = Joi.string()
-const email = Joi.string().email()
+const username = Joi.string().email().max(50)
 const password = Joi.string().min(8)
 const role = Joi.number().min(0).max(5)
+const name = Joi.string().max(50)
+const last_name = Joi.string().max(50)
+const birthday = Joi.date()
+const rut = Joi.string().min(9).max(10)
 
 const createUserSchema = Joi.object({                                                       
-  name: name,
-  last_name: last_name,
-  email: email.required(),
+  username: username.required(),
   password: password.required(),
-  role: role
+  role,
+  name,
+  last_name,
+  birthday,
+  rut
 })
 
 const updateUserSchema = Joi.object({                                                       
-  name: name,
-  last_name: last_name,
-  email: email,
+  username: username,
   password: password,
   role: role,
+  role,
+  name,
+  last_name,
+  birthday,
+  rut
 })
 
 const getUserSchema = Joi.object({

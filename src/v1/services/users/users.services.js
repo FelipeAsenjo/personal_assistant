@@ -17,10 +17,15 @@ class UserService {
         return user
     }
  
-    async findByEmail(email) {
-        const user = await models.User.findOne({where: { email }})
+    async findByUsername(username) {
+        const user = await models.User.findOne({where: { username }})
         return user
     }   
+
+    async findByRut(rut) {
+        const user = await models.User.findOne({where: { rut }})
+        return user
+    }
 
     async updateOne(id, changes) {
         const user = await models.User.findByPk(id)

@@ -1,15 +1,15 @@
 const boom = require('@hapi/boom')
-const { verifyPass, signToken } = require('../../../utils/auth.utils')
 const AuthService = require('./auth.services')
+const { verifyPass, signToken } = require('../../../utils/auth.utils')
 
 const service = new AuthService()
 
 class AuthController {
     async login(req, res, next) {
-        const { email, password } = req.body
+        const { username, password } = req.body
 
         try {
-            const user = await service.findByEmail(email)
+            const user = await service.findByEmail(username)
             if(!user) throw boom.unauthorized('user or password incorrect')
 
             const match = verifyPass(user, password)

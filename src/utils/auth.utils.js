@@ -12,14 +12,14 @@ const randomHex = () => randomBytes(16).toString('base64')
 
 const encryptPass = (password) => {
     const salt = randomHex()
-    const encryptedPass = scryptSync(password, salt, 64).toString('base64')
+    const encryptedPass = scryptSync(password, salt, 32).toString('base64')
 
     return `${salt}:${encryptedPass}`
 }
 
 const verifyPass = (user, password) => {
     const [salt, key] = user.password.split(':')
-    const hashedBuffer = scryptSync(password, salt, 64)
+    const hashedBuffer = scryptSync(password, salt, 32)
 
     const keyBuffer = Buffer.from(key, 'base64')
     const match = timingSafeEqual(hashedBuffer, keyBuffer)

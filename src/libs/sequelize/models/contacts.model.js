@@ -10,13 +10,18 @@ const ContactSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  person_id: {
-    allowNull: false,
-    type: DataTypes.UUID
-  },
   user_id: {
     allowNull: false,
     type: DataTypes.UUID
+  },
+  name: DataTypes.STRING(50),
+  last_name: DataTypes.STRING(50),
+  alias: DataTypes.STRING(50),
+  birthday: DataTypes.DATE,
+  rut: {
+    unique: true,
+    type: DataTypes.STRING(10),
+    defaultValue: null
   },
   favorite: {
     allowNull: false,
@@ -28,6 +33,10 @@ const ContactSchema = {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE
+  },
   updatedAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -36,16 +45,16 @@ const ContactSchema = {
 
 class Contact extends Model {
   static associate(models) {
-    this.belongsTo(models.Person, { as: 'person' })
+    // this.belongsTo(models.Person, { as: 'person' })
     this.belongsTo(models.User, { as: 'owner' })
 
     // this.hasMany(models.ContactTagJunction, { as: 'tags', foreignKey: 'contact_id' })
 
-    this.belongsToMany(models.ContactTag, {
-      through: models.ContactsTagsJunction,
-      foreignKey: 'contact_id',
-      otherKey: 'tag_id'
-    })
+    // this.belongsToMany(models.ContactTag, {
+    //   through: models.ContactsTagsJunction,
+    //   foreignKey: 'contact_id',
+    //   otherKey: 'tag_id'
+    // })
   }
 
   static config(sequelize) {
@@ -54,7 +63,6 @@ class Contact extends Model {
       tableName: CONTACT_TABLE,
       modelName: 'Contact',
       timestamps: true,
-      createdAt: false,
       paranoid: true,
     }
   }

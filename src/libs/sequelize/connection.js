@@ -19,9 +19,7 @@ const sequelize = new Sequelize(dbName, DB_USER, DB_PASS, {
 })
 
 setupModels(sequelize)
-
-//dev pourposes
-// sequelize.sync({ force: true })
+sequelize.sync({ force: false })
 
 const dbConnection = async () => {
   try { 

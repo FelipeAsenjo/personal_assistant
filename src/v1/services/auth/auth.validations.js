@@ -1,10 +1,10 @@
 const Joi = require('joi')
 
-const email = Joi.string().email()
+const username = Joi.string().email()
 const password = Joi.string()
 
 const loginSchema = Joi.object({                                                       
-  email: email.required(),
+  username: username.required(),
   password: password.required(),
 })
 

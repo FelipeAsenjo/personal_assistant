@@ -59,13 +59,13 @@ const TaskSchema = {
 class Task extends Model {
   static associate(models) {
     this.belongsTo(models.User, { as: 'owner' })
-    this.belongsTo(models.Project, { as: 'project' })
+    // this.belongsTo(models.Project, { as: 'project' })
 
-    this.belongsToMany(models.TaskTag, {
-      through: models.TaskTagJunction,
-      foreignKey: 'task_id',
-      otherKey: 'tag_id'
-    })
+    // this.belongsToMany(models.TaskTag, {
+    //   through: models.TaskTagJunction,
+    //   foreignKey: 'task_id',
+    //   otherKey: 'tag_id'
+    // })
   }
 
   static config(sequelize) {
