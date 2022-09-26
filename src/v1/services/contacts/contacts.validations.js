@@ -9,25 +9,25 @@ const rut = Joi.string().min(9).max(10)
 const email = Joi.string().email().max(50)
 const blocked = Joi.bool()
 const favorite = Joi.bool()
-
-const createContactSchema = Joi.object({                                                       
+const person = Joi.object({
   name,
   last_name,
-  alias,
   birthday,
-  rut,
-  blocked,
-  favorite
+  rut
+})
+
+const createContactSchema = Joi.object({                                                       
+  person,
+  alias,
+  favorite,
+  blocked
 })
 
 const updateContactSchema = Joi.object({                                                       
-  name,
-  last_name,
+  person,
   alias,
-  birthday,
-  rut,
-  blocked,
-  favorite
+  favorite,
+  blocked
 })
 
 const getContactSchema = Joi.object({

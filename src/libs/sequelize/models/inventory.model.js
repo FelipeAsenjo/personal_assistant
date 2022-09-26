@@ -42,7 +42,7 @@ const InventorySchema = {
 
 class Inventory extends Model {
   static associate(models) {
-    this.belongsTo(models.User, { as: 'owner' })
+    this.belongsTo(models.User, { as: 'owner', foreignKey: 'user_id' })
   }
 
   static config(sequelize) {

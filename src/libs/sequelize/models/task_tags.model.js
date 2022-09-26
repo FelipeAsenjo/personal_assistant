@@ -27,7 +27,7 @@ const TaskTagSchema = {
 class TaskTag extends Model {
   static associate(models) {
     this.belongsToMany(models.Task, {
-      through: models.TaskTagJunction,
+      through: 'task_tags_junction',
       foreignKey: 'tag_id',
       otherKey: 'task_id'
     })

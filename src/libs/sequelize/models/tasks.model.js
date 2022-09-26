@@ -10,10 +10,10 @@ const TaskSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  user_id: {
-    allowNull: false,
-    type: DataTypes.UUID
-  },
+  // user_id: {
+  //   allowNull: false,
+  //   type: DataTypes.UUID
+  // },
   project_id: {
     allowNull: true,
     type: DataTypes.UUID,
@@ -58,14 +58,14 @@ const TaskSchema = {
 
 class Task extends Model {
   static associate(models) {
-    this.belongsTo(models.User, { as: 'owner' })
-    // this.belongsTo(models.Project, { as: 'project' })
+    this.belongsTo(models.User, { as: 'owner', foreignKey: 'user_id' })
+    this.belongsTo(models.Project, { as: 'project', foreignKey: 'project_id' })
 
-    // this.belongsToMany(models.TaskTag, {
-    //   through: models.TaskTagJunction,
-    //   foreignKey: 'task_id',
-    //   otherKey: 'tag_id'
-    // })
+    this.belongsToMany(models.TaskTag, {
+      through: 'task_tags_junction',
+      foreignKey: 'task_id',
+      otherKey: 'tag_id'
+    })
   }
 
   static config(sequelize) {

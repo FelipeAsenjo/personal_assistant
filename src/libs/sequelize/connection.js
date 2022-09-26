@@ -19,7 +19,7 @@ const sequelize = new Sequelize(dbName, DB_USER, DB_PASS, {
 })
 
 setupModels(sequelize)
-sequelize.sync({ force: false })
+sequelize.sync({ force: true, match: /_dev$ || _test$/ })
 
 const dbConnection = async () => {
   try { 

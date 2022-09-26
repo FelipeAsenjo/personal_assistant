@@ -8,26 +8,25 @@ const name = Joi.string().max(50)
 const last_name = Joi.string().max(50)
 const birthday = Joi.date()
 const rut = Joi.string().min(9).max(10)
-
-const createUserSchema = Joi.object({                                                       
-  username: username.required(),
-  password: password.required(),
-  role,
+const person = Joi.object({
   name,
   last_name,
   birthday,
   rut
 })
 
-const updateUserSchema = Joi.object({                                                       
-  username: username,
-  password: password,
-  role: role,
+const createUserSchema = Joi.object({                                                       
+  username: username.required(),
+  password: password.required(),
   role,
-  name,
-  last_name,
-  birthday,
-  rut
+  person,
+})
+
+const updateUserSchema = Joi.object({                                                       
+  username,
+  password,
+  role,
+  person,
 })
 
 const getUserSchema = Joi.object({

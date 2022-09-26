@@ -43,6 +43,19 @@ class UserController {
         }
     }
 
+    async findByRut(req, res, next) {
+        try {
+            const { rut } = req.body
+            const user = await service.findByRut(rut)
+            if(!user) throw boom.notFound('user not found')
+
+            const {password, ...userWithoutPassword} = user.dataValues
+            res.status(200).json(userWithoutPassword)
+        } catch(error) {
+            next(error)
+        }
+    }
+
     async updateOne(req, res, next) {
         try {
             const { id } = req.params

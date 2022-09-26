@@ -21,7 +21,7 @@ const ProjectResourcesSchema = {
 
 class ProjectResources extends Model {
   static associate(models) {
-    this.belongsTo(models.Project, { as: 'project' })
+    this.belongsTo(models.Project, { as: 'project', foreignKey: 'project_id' })
   }
 
   static config(sequelize) {

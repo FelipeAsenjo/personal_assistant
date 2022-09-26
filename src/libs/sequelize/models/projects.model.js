@@ -32,9 +32,9 @@ const ProjectSchema = {
 
 class Project extends Model {
   static associate(models) {
-    this.hasMany(models.ProjectResources, { as: 'resources', foreignKey: 'project_id' })
+    this.hasMany(models.ProjectResources, { as: 'resources' })
     this.hasMany(models.Task, { as: 'tasks', foreignKey: 'project_id' })
-    this.belongsTo(models.User, { as: 'owner' })
+    this.belongsTo(models.User, { as: 'owner', foreignKey: 'user_id' })
   }
 
   static config(sequelize) {

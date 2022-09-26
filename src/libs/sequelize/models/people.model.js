@@ -10,7 +10,6 @@ const PersonSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  user_id: DataTypes.UUID,
   name: {
     allowNull: false,
     type: DataTypes.STRING(50)
@@ -19,7 +18,6 @@ const PersonSchema = {
     allowNull: false,
     type: DataTypes.STRING(50)
   },
-  alias: DataTypes.STRING(50),
   birthday: DataTypes.DATE,
   rut: {
     unique: true,
@@ -38,23 +36,20 @@ const PersonSchema = {
 
 class Person extends Model {
   static associate(models) {
+    this.hasOne(models.User, { as: 'user', foreignKey: 'person_id' })
     this.hasOne(models.Contact, { as: 'contact', foreignKey: 'person_id' })
-    this.hasMany(models.Phone, { as: 'phone', foreignKey: 'owner_id' })
-    this.hasMany(models.SocialMedia, { as: 'social_media', foreignKey: 'owner_id' })
-    this.hasMany(models.Email, { as: 'email', foreignKey: 'owner_id' })
-    this.hasMany(models.BankAccount, { as: 'bank_account', foreignKey: 'owner_id' })
-
-    this.belongsTo(models.User, { as: 'person' })
 
     this.belongsToMany(models.Vehicle, { 
-      through: models.OwnerVehicleJunction,
-      foreignKey: 'owner_id',
-      otherKey: 'vehicle_id'
+      through: 'person_vehicle_junction',
+      foreignKey: 'person_id',
+      otherKey: 'vehicle_id',
+      as: 'vehicle'
     })
     this.belongsToMany(models.Address, { 
-      through: models.OwnerAddressJunction,
-      foreignKey: 'owner_id',
-      otherKey: 'address_id'
+      through: 'person_address_junction',
+      foreignKey: 'person_id',
+      otherKey: 'address_id',
+      as: 'address'
     })
   }
 
@@ -67,7 +62,7 @@ class Person extends Model {
       paranoid: true,
       indexes: [
         {
-          fields: ['alias', 'name', 'last_name', 'rut']
+          fields: ['name', 'last_name', 'rut']
         }
       ]
     }

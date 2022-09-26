@@ -3,16 +3,12 @@ const { Model, DataTypes, Sequelize } = require('sequelize')
 const TRANSFER_TABLE = 'transfers'
 
 const TransferSchema = {
-  id: {
+  from_account_id: {
     primaryKey: true,
     allowNull: false,
     unique: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-  },
-  from_account_id: {
-    allowNull: false,
-    type: DataTypes.UUID
   },
   to_account_id: {
     allowNull: false,

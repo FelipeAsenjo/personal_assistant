@@ -27,7 +27,7 @@ const WishlistTagSchema = {
 class WishlistTag extends Model {
   static associate(models) {
     this.belongsToMany(models.Wishlist, {
-      through: models.WishlistTagJunction,
+      through: 'wishlist_tags_junction',
       foreignKey: 'tag_id',
       otherKey: 'wishlist_id'
     })

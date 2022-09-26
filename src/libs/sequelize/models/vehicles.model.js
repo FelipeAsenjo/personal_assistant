@@ -33,9 +33,10 @@ const VehicleSchema = {
 class Vehicle extends Model {
   static associate(models) {
     this.belongsToMany(models.Person, {
-      through: models.OwnerVehicleJunction,
+      through: 'person_vehicle_junction',
       foreignKey: 'vehicle_id',
-      otherKey: 'owner_id'
+      otherKey: 'person_id',
+      as: 'owner'
     })
   }
 

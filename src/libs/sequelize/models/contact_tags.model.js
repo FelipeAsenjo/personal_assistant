@@ -28,7 +28,7 @@ class ContactTag extends Model {
   static associate(models) {
 
     this.belongsToMany(models.Contact, {
-      through: models.ContactsTagsJunction,
+      through: 'contacts_tags_junction',
       foreignKey: 'tag_id',
       otherKey: 'contact_id'
     })
