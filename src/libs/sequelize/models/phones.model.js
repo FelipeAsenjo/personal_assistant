@@ -12,7 +12,10 @@ const PhoneSchema = {
   },
   user_id: DataTypes.UUID,
   contact_id: DataTypes.UUID,
-  country_code: DataTypes.SMALLINT,
+  country_code: {
+    type: DataTypes.SMALLINT,
+    defaultValue: '+56'
+  },
   number: {
     allowNull: false,
     unique: true,

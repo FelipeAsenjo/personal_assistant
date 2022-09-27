@@ -17,12 +17,6 @@ const { Vehicle, VehicleSchema } = require('./vehicles.model')
 const { WishlistTag, WishlistTagSchema } = require('./wishlist_tags.model')
 const { Wishlist, WishlistSchema } = require('./wishlist.model')
 
-const { ContactTagJunction, ContactTagJunctionSchema } = require('./contacts_tags_junction.model')
-const { TaskTagJunction, TaskTagJunctionSchema } = require('./task_tag_junction.model')
-const { WishlistTagJunction, WishlistTagJunctionSchema } = require('./wishlist_tags_junction.model')
-const { OwnerAddressJunction, OwnerAddressJunctionSchema } = require('./owner_address_junction.model')
-const { OwnerVehicleJunction, OwnerVehicleJunctionSchema } = require('./owner_vehicle_junction.model')
-
 function setupModels(sequelize) {
   Address.init(AddressSchema, Address.config(sequelize))
   BankAccount.init(BankAccountSchema, BankAccount.config(sequelize))

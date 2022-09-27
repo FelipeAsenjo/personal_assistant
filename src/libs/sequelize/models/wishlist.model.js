@@ -27,11 +27,6 @@ const WishlistSchema = {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-  done: {
-    allowNull: false,
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
   favorite: {
     allowNull: false,
     type: DataTypes.BOOLEAN,

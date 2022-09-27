@@ -16,7 +16,6 @@ const VehicleSchema = {
   },
   type: {
     type: DataTypes.ENUM(['BUS', 'JEEP', 'VAN', 'CAR', 'MOTORBIKE']),
-    unique: true,
     allowNull: false
   },
   brand: DataTypes.STRING(30),
