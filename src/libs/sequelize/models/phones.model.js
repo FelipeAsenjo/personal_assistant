@@ -10,8 +10,10 @@ const PhoneSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  user_id: DataTypes.UUID,
-  contact_id: DataTypes.UUID,
+  person_id: {
+    allowNull: false,
+    type: DataTypes.UUID
+  },
   country_code: {
     type: DataTypes.SMALLINT,
     defaultValue: '+56'
@@ -26,8 +28,7 @@ const PhoneSchema = {
 
 class Phone extends Model {
   static associate(models) {
-    this.belongsTo(models.Contact, { as: 'contact', foreignKey: 'contact_id' })
-    this.belongsTo(models.User, { as: 'user', foreignKey: 'user_id' })
+    this.belongsTo(models.Person, { as: 'person', foreignKey: 'person_id' })
   }
 
   static config(sequelize) {

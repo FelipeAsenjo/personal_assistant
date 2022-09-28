@@ -43,11 +43,6 @@ class User extends Model {
     this.hasMany(models.Wishlist, { as: 'wishes', foreignKey: 'user_id' })
     this.hasMany(models.Inventory, { as: 'inventory', foreignKey: 'user_id'  })
     this.hasMany(models.Project, { as: 'projects', foreignKey: 'user_id'  })
-    this.hasMany(models.Email, { as: 'emails', foreignKey: 'user_id'})
-    this.hasMany(models.Phone, { as: 'phones', foreignKey: 'user_id' })
-    this.hasMany(models.SocialMedia, { as: 'social_media', foreignKey: 'user_id' })
-    this.hasMany(models.BankAccount, { as: 'bank_accounts', foreignKey: 'user_id' })
-
   }
 
   static config(sequelize) {

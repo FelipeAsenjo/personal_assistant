@@ -1,22 +1,22 @@
 'use strict';
 
 const { ADDRESS_TABLE, AddressSchema } = require('../models/address.model')
-const { BANK_ACCOUNT_TABLE, BankAccountSchema } = require('../models/bank_account.model')
-const { CONTACT_TAG_TABLE, ContactTagSchema } = require('../models/contact_tags.model')
+const { BANK_ACCOUNT_TABLE, BankAccountSchema } = require('../models/bankAccount.model')
+const { CONTACT_TAG_TABLE, ContactTagSchema } = require('../models/contactTags.model')
 const { CONTACT_TABLE, ContactSchema } = require('../models/contacts.model')
 const { EMAIL_TABLE, EmailSchema } = require('../models/emails.model')
 const { INVENTORY_TABLE, InventorySchema } = require('../models/inventory.model')
 const { PERSON_TABLE, PersonSchema } = require('../models/people.model')
 const { PHONE_TABLE, PhoneSchema } = require('../models/phones.model')
-const { PROJECT_RESOURCES_TABLE, ProjectResourcesSchema } = require('../models/project_resources.model')
+const { PROJECT_RESOURCES_TABLE, ProjectResourcesSchema } = require('../models/projectResources.model')
 const { PROJECT_TABLE, ProjectSchema } = require('../models/projects.model')
-const { SOCIAL_MEDIA_TABLE, SocialMediaSchema } = require('../models/social_media.model')
-const { TASK_TAG_TABLE, TaskTagSchema } = require('../models/task_tags.model')
+const { SOCIAL_MEDIA_TABLE, SocialMediaSchema } = require('../models/socialMedia.model')
+const { TASK_TAG_TABLE, TaskTagSchema } = require('../models/taskTags.model')
 const { TASK_TABLE, TaskSchema } = require('../models/tasks.model')
 const { TRANSFER_TABLE, TransferSchema } = require('../models/transfers.model')
 const { USER_TABLE, UserSchema } = require('../models/users.model')
 const { VEHICLE_TABLE, VehicleSchema } = require('../models/vehicles.model')
-const { WISHLIST_TAG_TABLE, WishlistTagSchema } = require('../models/wishlist_tags.model')
+const { WISHLIST_TAG_TABLE, WishlistTagSchema } = require('../models/wishlistTags.model')
 const { WISHLIST_TABLE, WishlistSchema } = require('../models/wishlist.model')
 
 module.exports = {

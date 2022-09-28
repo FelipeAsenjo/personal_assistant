@@ -40,10 +40,6 @@ class Contact extends Model {
   static associate(models) {
     this.belongsTo(models.Person, { as: 'person', foreignKey: 'person_id' })
     this.belongsTo(models.User, { as: 'owner', foreignKey: 'user_id' })
-    this.hasMany(models.Email, { as: 'emails', foreignKey: 'contact_id'})
-    this.hasMany(models.Phone, { as: 'phones', foreignKey: 'contact_id' })
-    this.hasMany(models.SocialMedia, { as: 'social_media', foreignKey: 'contact_id' })
-    this.hasMany(models.BankAccount, { as: 'bank_accounts', foreignKey: 'contact_id' })
 
     this.belongsToMany(models.ContactTag, {
       through: 'contacts_tags_junction',

@@ -10,13 +10,15 @@ const SocialMediaSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  user_id: DataTypes.UUID,
-  contact_id: DataTypes.UUID,
+  person_id: {
+    allowNull: false,
+    type: DataTypes.UUID
+  },
   service: {
     allowNull: false,
     type: DataTypes.STRING(30)
   },
-  account_name: {
+  username: {
     allowNull: false,
     unique: true,
     type: DataTypes.STRING(50),
@@ -27,8 +29,7 @@ const SocialMediaSchema = {
 
 class SocialMedia extends Model {
   static associate(models) {
-    this.belongsTo(models.Contact, { as: 'contact', foreignKey: 'contact_id' })
-    this.belongsTo(models.User, { as: 'user', foreignKey: 'user_id' })
+    this.belongsTo(models.Person, { as: 'person', foreignKey: 'person_id' })
   }
 
   static config(sequelize) {
@@ -39,7 +40,7 @@ class SocialMedia extends Model {
       paranoid: true,
       indexes: [
         {
-          fields: ['account_name']
+          fields: ['username']
         }
       ]
     }

@@ -38,6 +38,10 @@ class Person extends Model {
   static associate(models) {
     this.hasOne(models.User, { as: 'user', foreignKey: 'person_id' })
     this.hasOne(models.Contact, { as: 'contact', foreignKey: 'person_id' })
+    this.hasMany(models.Phone, { as: 'phones', foreignKey: 'person_id' })
+    this.hasMany(models.SocialMedia, { as: 'socialMedia', foreignKey: 'person_id' })
+    this.hasMany(models.BankAccount, { as: 'bankAccount', foreignKey: 'person_id' })
+    this.hasMany(models.Email, { as: 'emails', foreignKey: 'person_id' })
 
     this.belongsToMany(models.Vehicle, { 
       through: 'person_vehicle_junction',

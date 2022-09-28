@@ -10,10 +10,10 @@ const TaskSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  // user_id: {
-  //   allowNull: false,
-  //   type: DataTypes.UUID
-  // },
+  user_id: {
+    allowNull: false,
+    type: DataTypes.UUID
+  },
   project_id: {
     allowNull: true,
     type: DataTypes.UUID,
