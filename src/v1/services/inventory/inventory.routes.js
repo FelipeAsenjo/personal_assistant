@@ -1,5 +1,5 @@
 const express = require('express')
-const UserController = require('./users.controllers')
+const UserController = require('./inventory.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
     updateUserSchema,
