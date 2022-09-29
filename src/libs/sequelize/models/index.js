@@ -38,11 +38,13 @@ function setupModels(sequelize) {
   Task.associate(sequelize.models)
   Inventory.associate(sequelize.models)
   Project.associate(sequelize.models)
+  ProjectResources.associate(sequelize.models)
   Wishlist.associate(sequelize.models)
   Phone.associate(sequelize.models)
   SocialMedia.associate(sequelize.models)
   Email.associate(sequelize.models)
   BankAccount.associate(sequelize.models)
+  Transfer.associate(sequelize.models)
   Address.associate(sequelize.models)
   Vehicle.associate(sequelize.models)
 }

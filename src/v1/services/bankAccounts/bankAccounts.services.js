@@ -1,4 +1,7 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { Contact } = require('../../../libs/sequelize/models/contacts.model')
+const { Person } = require('../../../libs/sequelize/models/people.model')
+const { User } = require('../../../libs/sequelize/models/users.model')
 const { models } = sequelize
 
 class BankAccountService {
@@ -7,25 +10,66 @@ class BankAccountService {
         return newBankAccount
     }
 
-    async findAll() {
-        const bankAccounts = await models.BankAccount.findAll()
+    async findAll(user_id) {
+        const bankAccounts = await models.BankAccount.findAll({
+            where: { '$contact.user_id$': user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return bankAccounts
     }
 
-    async findOne(id) {
-        const bankAccount = await models.BankAccount.findByPk(id, { include: 'person' })
+    async findOne(id, user_id) {
+        const bankAccount = await models.BankAccount.findByPk(id, {
+            where: { user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return bankAccount
     }
- 
-    async findByAccountNumber(accountNumber) {
-        const bankAccount = await models.BankAccount.findOne({where: { accountNumber }, include: 'person'})
+
+    async findMyOwn(user_id) {
+        const bankAccount = await models.BankAccount.findAll({
+            where: { user_id },
+            include: {
+                model: User,
+                as: 'user',
+                include: 'person'
+            }
+        })
+        return bankAccount
+    }
+
+    async findByAccountNumber(account_number, user_id) {
+        const bankAccount = await models.BankAccount.findOne({
+            where: { account_number, user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return bankAccount
     }   
 
-    async findByRut(rut) {
+    async findByRut(rut, user_id) {
         const bankAccount = await models.BankAccount.findOne({
-            where: { '$person.rut$': rut },
-            include: 'person'
+            where: { user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: {
+                    model: Person,
+                    as: 'person',
+                    where: { rut }
+                }
+            }
         })
         return bankAccount
     }
