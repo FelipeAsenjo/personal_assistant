@@ -24,7 +24,7 @@ class BankAccountService {
 
     async findByRut(rut) {
         const bankAccount = await models.BankAccount.findOne({
-            where: { '$person.rut$' : rut },
+            where: { '$person.rut$': rut },
             include: 'person'
         })
         return bankAccount

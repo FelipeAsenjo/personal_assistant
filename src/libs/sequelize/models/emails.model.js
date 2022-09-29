@@ -10,10 +10,8 @@ const EmailSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  person_id: {
-    allowNull: false,
-    type: DataTypes.UUID
-  },
+  user_id: DataTypes.UUID,
+  contact_id: DataTypes.UUID,
   address: {
     allowNull: false,
     unique: true,
@@ -24,7 +22,8 @@ const EmailSchema = {
 
 class Email extends Model {
   static associate(models) {
-    this.belongsTo(models.Person, { as: 'person', foreignKey: 'person_id' })
+    this.belongsTo(models.User, { as: 'user', foreignKey: 'user_id' })
+    this.belongsTo(models.Contact, { as: 'contact', foreignKey: 'contact_id' })
   }
 
   static config(sequelize) {

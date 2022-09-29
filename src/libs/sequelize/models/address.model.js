@@ -10,10 +10,8 @@ const AddressSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  owner_id: {
-    type: DataTypes.UUID,
-    allowNull: false
-  },
+  user_id: DataTypes.UUID,
+  contact_id: DataTypes.UUID,
   street: {
     allowNull: false,
     type: DataTypes.STRING,
@@ -34,11 +32,17 @@ const AddressSchema = {
 
 class Address extends Model {
   static associate(models) {
-    this.belongsToMany(models.Person, {
-      through: 'person_address_junction',
-      foreignKey: 'address_id',
-      otherKey: 'person_id',
-      as: 'owner'
+    this.belongsToMany(models.User, {
+      through: 'user_vehicle_junction',
+      foreignKey: 'vehicle_id',
+      otherKey: 'user_id',
+      as: 'user'
+    })
+    this.belongsToMany(models.Contact, {
+      through: 'contact_vehicle_junction',
+      foreignKey: 'vehicle_id',
+      otherKey: 'contact_id',
+      as: 'contact'
     })
   }
 

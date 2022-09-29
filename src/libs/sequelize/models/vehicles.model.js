@@ -10,10 +10,8 @@ const VehicleSchema = {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  owner_id: {
-    allowNull: false,
-    type: DataTypes.UUID
-  },
+  user_id: DataTypes.UUID,
+  contact_id: DataTypes.UUID,
   type: {
     type: DataTypes.ENUM(['BUS', 'JEEP', 'VAN', 'CAR', 'MOTORBIKE']),
     allowNull: false
@@ -31,11 +29,17 @@ const VehicleSchema = {
 
 class Vehicle extends Model {
   static associate(models) {
-    this.belongsToMany(models.Person, {
-      through: 'person_vehicle_junction',
+    this.belongsToMany(models.User, {
+      through: 'user_vehicle_junction',
       foreignKey: 'vehicle_id',
-      otherKey: 'person_id',
-      as: 'owner'
+      otherKey: 'user_id',
+      as: 'user'
+    })
+    this.belongsToMany(models.Contact, {
+      through: 'contact_vehicle_junction',
+      foreignKey: 'vehicle_id',
+      otherKey: 'contact_id',
+      as: 'contact'
     })
   }
 
