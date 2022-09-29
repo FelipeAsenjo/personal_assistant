@@ -46,6 +46,7 @@ const TaskSchema = {
   period_type: DataTypes.ENUM(['YEAR', 'MONTH', 'WEEK', 'DAY', 'CUSTOM']),
   period_iterator: DataTypes.SMALLINT,
   days: DataTypes.ARRAY(DataTypes.SMALLINT),
+  tags: DataTypes.JSON(),
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -60,12 +61,6 @@ class Task extends Model {
   static associate(models) {
     this.belongsTo(models.User, { as: 'owner', foreignKey: 'user_id' })
     this.belongsTo(models.Project, { as: 'project', foreignKey: 'project_id' })
-
-    this.belongsToMany(models.TaskTag, {
-      through: 'task_tags_junction',
-      foreignKey: 'task_id',
-      otherKey: 'tag_id'
-    })
   }
 
   static config(sequelize) {

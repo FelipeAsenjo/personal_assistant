@@ -32,6 +32,7 @@ const WishlistSchema = {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  tags: DataTypes.JSON(),
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -45,12 +46,6 @@ const WishlistSchema = {
 class Wishlist extends Model {
   static associate(models) {
     this.belongsTo(models.User, { as: 'owner', foreignKey: 'user_id' })
-
-    this.belongsToMany(models.WishlistTag, {
-      through: 'wishlist_tags_junction',
-      foreignKey: 'wishlist_id',
-      otherKey: 'tag_id'
-    })
   }
 
   static config(sequelize) {

@@ -26,6 +26,7 @@ const ContactSchema = {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+  tags: DataTypes.JSON(),
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -57,11 +58,6 @@ class Contact extends Model {
       foreignKey: 'contact_id',
       otherKey: 'address_id',
       as: 'address'
-    })
-    this.belongsToMany(models.ContactTag, {
-      through: 'contacts_tags_junction',
-      foreignKey: 'contact_id',
-      otherKey: 'tag_id'
     })
   }
 
