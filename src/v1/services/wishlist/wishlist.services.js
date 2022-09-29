@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { models } = sequelize
 
@@ -7,18 +8,34 @@ class WishlistService {
         return newWish
     }
 
-    async findAll(Wish_id) {
+    async findAll(user_id) {
         const wishes = await models.Wishlist.findAll({where: { user_id }})
         return wishes
     }
 
-    async findOne(id) {
-        const wish = await models.Wishlist.findByPk(id)
+    async findOne(id, user_id) {
+        const wish = await models.Wishlist.findByPk(id, {
+            where: { user_id }
+        })
         return wish
     }
  
-    async findByItemName(itemName) {
-        const wish = await models.Wishlist.findOne({where: { itemName }})
+    async findByItemName(item_name, user_id) {
+        const wish = await models.Wishlist.findAll({
+            where: { item_name, user_id }
+        })
+        return wish
+    }
+
+    async findByFavorite(user_id) {
+        const wish = await models.Wishlist.findAll({
+            where: { 
+                [Op.and]: {
+                    [Op.is]: { favorite: true },
+                    user_id
+                }
+            }
+        })
         return wish
     }
 

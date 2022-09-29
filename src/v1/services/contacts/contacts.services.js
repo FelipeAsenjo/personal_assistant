@@ -3,41 +3,49 @@ const { models } = sequelize
 
 class ContactService {
     async create(data) {
-        const newContact = await models.Contact.create(data, {include: 'person'})
+        const newContact = await models.Contact.create(data, {
+            include: 'person'
+        })
         return newContact
     }
 
-    async findAll() {
-        const contacts = await models.Contact.findAll({include: 'person'})
+    async findAll(user_id) {
+        const contacts = await models.Contact.findAll({
+            where: { user_id },
+            include: 'person'
+        })
         return contacts
     }
 
-    async findOne(id) {
-        const contact = await models.Contact.findByPk(id, {include: 'person'})
+    async findOne(id, user_id) {
+        const contact = await models.Contact.findByPk(id, {
+            where: { user_id },
+            include: 'person'
+        })
         return contact
     }
  
-    async findByRut(rut) {
+    async findByRut(rut, user_id) {
         const contact = await models.Contact.findOne({
-            where: { '$person.rut$' : rut },
+            where: { '$person.rut$': rut, user_id },
             include: 'person'
         })
         return contact
     }
 
-    async findByAlias(alias) {
+    async findByAlias(alias, user_id) {
         const contact = await models.Contact.findOne({
-            where: { alias },
+            where: { alias, user_id },
             include: 'person'
         })
         return contact
     }      
 
-    async findByEmail(email) {
+    async findByEmail(email, user_id) {
         const contact = await models.Contact.findOne({
-            where: { '$emails.address$' : email },
+            where: { '$emails.address$': email, user_id },
             include: 'person'
-    })
+        })
         return contact
     }
 

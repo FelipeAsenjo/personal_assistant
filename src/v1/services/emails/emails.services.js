@@ -1,26 +1,53 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { Contact } = require('../../../libs/sequelize/models/contacts.model')
+const { User } = require('../../../libs/sequelize/models/users.model')
 const { models } = sequelize
 
 class EmailService {
     async create(data) {
-        const newEmail = await models.Email.create(data, {include: 'person'})
+        const newEmail = await models.Email.create(data)
         return newEmail
     }
 
-    async findAll() {
-        const emails = await models.Email.findAll({include: 'person'})
+    async findAll(user_id) {
+        const emails = await models.Email.findAll({
+            where: { '$contact.user_id$': user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return emails
     }
 
-    async findOne(id) {
-        const email = await models.Email.findByPk(id, { include: 'person' })
+    async findOne(id, user_id) {
+        const email = await models.Email.findByPk(id, {
+            where: { user_id },
+        })
         return email
     }
  
-    async findByAddress(emailAddress) {
-        const email = await models.Email.findOne({
-            where: { emailAddress },
-            include: 'person'
+    async findMyOwn(user_id) {
+        const emails = await models.Email.findAll({
+            where: { user_id },
+            include: {
+                model: User,
+                as: 'user',
+                include: 'person'
+            }
+        })
+        return emails
+    }
+
+    async findByContact(contact_id, user_id) {
+        const email = await models.Email.findAll({
+            where: { contact_id, user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
         })
         return email
     }

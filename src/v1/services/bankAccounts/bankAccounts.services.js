@@ -74,6 +74,18 @@ class BankAccountService {
         return bankAccount
     }
 
+    async findByContact(contact_id, user_id) {
+        const phone = await models.Phone.findOne({
+            where: { contact_id, user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
+        return phone
+    }
+
     async updateOne(id, changes) {
         const bankAccount = await models.BankAccount.findByPk(id)
         const updatedAccount = bankAccount.update(changes)

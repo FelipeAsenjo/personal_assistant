@@ -1,4 +1,5 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { Contact } = require('../../../libs/sequelize/models/contacts.model')
 const { models } = sequelize
 
 class SocialMediaService {
@@ -8,19 +9,37 @@ class SocialMediaService {
     }
 
     async findAll(user_id) {
-        const socialMedia = await models.SocialMedia.findAll({where: { user_id }, include: 'person'})
+        const socialMedia = await models.SocialMedia.findAll({
+            where: { '$contact.user_id$': user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return socialMedia
     }
 
-    async findOne(id) {
-        const socialMedia = await models.SocialMedia.findByPk(id, { include: 'person' })
+    async findOne(id, user_id) {
+        const socialMedia = await models.SocialMedia.findByPk(id, {
+            where: { '$contact.user_id$': user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }           
+        })
         return socialMedia
     }
  
-    async findByUsername(username) {
+    async findByUsername(username, user_id) {
         const socialMedia = await models.SocialMedia.findOne({
-            where: { username },
-            include: 'person'
+            where: { '$contact.user_id$': user_id, username },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
         })
         return socialMedia
     }

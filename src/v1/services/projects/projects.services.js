@@ -8,19 +8,27 @@ class ProjectService {
     }
 
     async findAll(user_id) {
-        const projects = await models.Project.findAll({where: { user_id }})
+        const projects = await models.Project.findAll({
+            where: { user_id },
+            include: ['tasks', 'resources']
+        })
         return projects
     }
 
-    async findOne(id) {
-        const project = await models.Project.findByPk(id)
+    async findOne(id, user_id) {
+        const project = await models.Project.findByPk(id, {
+            where: { user_id },
+            include: ['tasks', 'resources']
+        })
         return project
     }
-
-    async findByUsername(username) {
-        const projects = await models.Project.findAll({where: { username }, include: 'owner'})
-        return projects
-    }
+ 
+    async findItemByName(title, user_id) {
+        const Item = await models.Project.findAll({
+            where: { title, user_id }
+        })
+        return Item
+    }   
 
     async updateOne(id, changes) {
         const project = await models.Project.findByPk(id)

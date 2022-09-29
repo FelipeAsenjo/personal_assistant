@@ -21,6 +21,16 @@ class PeopleService {
         const person = await models.Person.findOne({where: { rut }})
         return person
     }   
+ 
+    async findByName(name) {
+        const person = await models.Person.findAll({where: { name }})
+        return person
+    }   
+
+    async findByLastName(last_name) {
+        const person = await models.Person.findAll({where: { last_name }})
+        return person
+    }   
 
     async updateOne(id, changes) {
         const person = await models.Person.findByPk(id)

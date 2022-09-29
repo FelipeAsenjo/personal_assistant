@@ -1,4 +1,5 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { Contact } = require('../../../libs/sequelize/models/contacts.model')
 const { models } = sequelize
 
 class TransferService {
@@ -7,18 +8,50 @@ class TransferService {
         return newTransfer
     }
 
-    async findAll() {
-        const transfers = await models.Transfer.findAll({include: 'person'})
+    async findAll(user_id) {
+        const transfers = await models.Transfer.findAll({
+            where: { '$from_account.user_id$': user_id },
+        })
         return transfers
     }
 
-    async findOne(id) {
-        const transfer = await models.Transfer.findByPk(id, { include: 'person' })
+    async findOne(id, user_id) {
+        const transfer = await models.Transfer.findByPk(id, {
+            where: { '$from_account.user_id$': user_id },
+        })
         return transfer
     }
  
-    async findByAccountNumber(account_number) {
-        const transfer = await models.Transfer.findOne({where: { account_number }})
+    async findByAccountNumber(account_number, user_id) {
+        const transfer = await models.Transfer.findAll({
+            where: { '$from_account.user_id$': user_id, account_number },
+        })
+        return transfer
+    }
+
+    async findByContact(contact_id, user_id) {
+        const transfer = await models.Transfer.findAll({
+            where: { contact_id, user_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
+        return transfer
+    }
+
+    async findByStandBy(standby, user_id) {
+        const transfer = await models.Transfer.findAll({
+            where: { '$from_account.user_id$': user_id, standby },
+        })
+        return transfer
+    }
+
+    async findByIncome(is_income, user_id) {
+        const transfer = await models.Transfer.findAll({
+            where: { '$from_account.user_id$': user_id, is_income },
+        })
         return transfer
     }
 

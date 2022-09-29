@@ -49,7 +49,7 @@ const TransferSchema = {
 
 class Transfer extends Model {
   static associate(models) {
-    this.belongsTo(models.BankAccount, { as: 'from_account' })
+    this.belongsTo(models.BankAccount, { as: 'from_account', foreignKey: 'from_account_id' })
   }
 
   static config(sequelize) {

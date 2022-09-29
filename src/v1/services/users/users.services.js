@@ -3,7 +3,9 @@ const { models } = sequelize
 
 class UserService {
     async create(data) {
-        const newUser = await models.User.create(data, {include: 'person'})
+        const newUser = await models.User.create(data, {
+            include: 'person'
+        })
         return newUser
     }
 
@@ -13,7 +15,7 @@ class UserService {
     }
 
     async findOne(id) {
-        const user = await models.User.findByPk(id, { include: 'person' })
+        const user = await models.User.findByPk(id, {include: 'person'})
         return user
     }
  

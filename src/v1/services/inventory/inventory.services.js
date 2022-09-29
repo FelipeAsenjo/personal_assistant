@@ -8,17 +8,23 @@ class InventoryService {
     }
 
     async findAll(user_id) {
-        const Inventory = await models.Inventory.findAll({where: { user_id }})
+        const Inventory = await models.Inventory.findAll({
+            where: { user_id }
+        })
         return Inventory
     }
 
-    async findOne(id) {
-        const Item = await models.Inventory.findByPk(id)
+    async findOne(id, user_id) {
+        const Item = await models.Inventory.findByPk(id, {
+            where: { user_id }
+        })
         return Item
     }
  
-    async findItemByName(itemName) {
-        const Item = await models.Inventory.findAll({where: { itemName }})
+    async findItemByName(item_name, user_id) {
+        const Item = await models.Inventory.findAll({
+            where: { item_name, user_id }
+        })
         return Item
     }   
 
