@@ -1,21 +1,18 @@
 const boom = require('@hapi/boom')
-const UserService = require('./users.services')
-const { encryptPass } = require('../../../utils/auth.utils')
+const EmailService = require('./emails.services')
 
-const service = new UserService()
+const service = new EmailService()
 
-class UserController {
+class EmailController {
     async create(req, res, next) {
-        const { body } = req
+        const { body, user } = req
         try {
-            const userExist = await service.findByUsername(body.username)
-            if(userExist) throw boom.conflict('user already exist')
+            const emailExist = await service.findByAddress(body.address, user.id)
+            if(emailExist) throw boom.conflict('email already exist')
+            if(!body.contact_id) body.user_id = user.id
 
-            body.password = encryptPass(body.password)
-            const newUser = await service.create(body)
-            const {password, ...userWithoutPassword} = newUser.dataValues
-
-            res.status(201).json(userWithoutPassword)
+            const newEmail = await service.create(body)
+            res.status(201).json(newEmail.dataValues)
         } catch(error) {
             next(error)
         }
@@ -23,65 +20,85 @@ class UserController {
 
     async findAll(req, res, next) {
         try {
-            const users = await service.findAll()
-            res.status(200).json(users)
+            const emails = await service.findAll(req.user.id)
+            res.status(200).json(emails)
         } catch(error) {
             next(error)
         }
     }
 
     async findOne(req, res, next) {
+        const { params, user } = req
         try {
-            const { id } = req.params
-            const user = await service.findOne(id)
-            if(!user) throw boom.notFound('user not found')
+            const email = await service.findOne(params.id, user.id)
+            if(!email) throw boom.notFound('email not found')
 
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(200).json(userWithoutPassword)
+            res.status(200).json(email.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
-    async findByRut(req, res, next) {
+    async findMyOwn(req, res, next) {
         try {
-            const { rut } = req.body
-            const user = await service.findByRut(rut)
-            if(!user) throw boom.notFound('user not found')
+            const email = await service.findMyOwn(req.user.id)
+            if(!email) throw boom.notFound('email not found')
 
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(200).json(userWithoutPassword)
+            res.status(200).json(email.dataValues)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async findByAddress(req, res, next) {
+        const { user, body } = req
+        try {
+            const email = await service.findByAddress(body.address, user.id)
+            if(!email) throw boom.notFound('email not found')
+
+            res.status(200).json(email.dataValues)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async findByContact(req, res, next) {
+        const { user, body } = req
+        try {
+            const email = await service.findByContact(body.contact_id, user.id)
+            if(!email) throw boom.notFound('email not found')
+
+            res.status(200).json(email.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
     async updateOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
-            const userExist = await service.findOne(id)
-            if(!userExist) throw boom.notFound('user not found')
+            const emailExist = await service.findOne(id, req.user.id)
+            if(!emailExist) throw boom.notFound('email not found')
 
-            const user = await service.updateOne(id, req.body)
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(201).json(userWithoutPassword)
+            const email = await service.updateOne(id, req.body)
+            res.status(201).json(email.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
     async deleteOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
-            const userExist = await service.findOne(id)
-            if(!userExist) throw boom.notFound('user not found')
+            const emailExist = await service.findOne(id, req.user.id)
+            if(!emailExist) throw boom.notFound('email not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'user deleted' })
+            res.status(204).json({ id, message: 'email deleted' })
         } catch(error) {
             next(error)
         }
     }
 }
 
-module.exports = UserController
+module.exports = EmailController

@@ -23,7 +23,7 @@ class ProjectService {
         return project
     }
  
-    async findItemByName(title, user_id) {
+    async findByProjectName(title, user_id) {
         const Item = await models.Project.findAll({
             where: { title, user_id }
         })

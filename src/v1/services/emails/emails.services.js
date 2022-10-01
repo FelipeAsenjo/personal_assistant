@@ -40,9 +40,21 @@ class EmailService {
         return emails
     }
 
+    async findByAddress(address, user_id) {
+        const email = await models.Email.findOne({
+            where: { '$contact.user_id$': user_id, address },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
+        return email
+    }
+
     async findByContact(contact_id, user_id) {
         const email = await models.Email.findAll({
-            where: { contact_id, user_id },
+            where: { '$contact.user_id$': user_id, contact_id },
             include: {
                 model: Contact,
                 as: 'contact',

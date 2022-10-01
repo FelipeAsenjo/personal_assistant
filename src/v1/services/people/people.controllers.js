@@ -5,13 +5,11 @@ const service = new PeopleService()
 
 class PeopleController {
     async create(req, res, next) {
-        const { body } = req
         try {
-            const personExist = await service.findByRut(body.rut)
+            const personExist = await service.findByRut(req.body.rut)
             if(personExist) throw boom.conflict('person already exist')
 
             const newPerson = await service.create(body)
-
             res.status(201).json(newPerson.dataValues)
         } catch(error) {
             next(error)
@@ -29,8 +27,7 @@ class PeopleController {
 
     async findOne(req, res, next) {
         try {
-            const { id } = req.params
-            const person = await service.findOne(id)
+            const person = await service.findOne(req.params.id)
             if(!person) throw boom.notFound('person not found')
 
             res.status(200).json(person.dataValues)
@@ -39,9 +36,49 @@ class PeopleController {
         }
     }
 
-    async updateOne(req, res, next) {
+    async findPerson(req, res, next) {
         try {
-            const { id } = req.params
+            const person = await this.searchByMulti(req.body)
+            if(!person) throw boom.notFound('person not found')
+
+            res.status(200).json(person.dataValues)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async searchByMulti(body) {
+        const { rut, last_name, name } = body
+        const personExist = async () => {
+            try {
+                if(rut) {
+                    const personByRut = await service.findByRut(rut)
+                    if(!personByRut) throw boom.notFound('person not found')
+                    return personByRut
+                } 
+                if(lastName) {
+                    const personByLastName = await service.findByEmail(last_name)
+                    if(!personByLastName) throw boom.notFound('person not found')
+                    return personByLastName
+                } 
+                if(name) {
+                    const personByName = await service.findByAlias(name)
+                    if(!personByName) throw boom.notFound('person not found')
+                    return personByName
+                } 
+
+                return false
+            } catch(error) {
+                next(error)
+            }
+        }
+
+        return personExist
+    }
+
+    async updateOne(req, res, next) {
+        const { id } = req.params
+        try {
             const personExist = await service.findOne(id)
             if(!personExist) throw boom.notFound('person not found')
 
@@ -53,8 +90,8 @@ class PeopleController {
     }
 
     async deleteOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
             const personExist = await service.findOne(id)
             if(!personExist) throw boom.notFound('person not found')
 

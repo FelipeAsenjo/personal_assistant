@@ -33,14 +33,14 @@ const AddressSchema = {
 class Address extends Model {
   static associate(models) {
     this.belongsToMany(models.User, {
-      through: 'user_vehicle_junction',
-      foreignKey: 'vehicle_id',
+      through: 'user_address_junction',
+      foreignKey: 'address_id',
       otherKey: 'user_id',
       as: 'user'
     })
     this.belongsToMany(models.Contact, {
-      through: 'contact_vehicle_junction',
-      foreignKey: 'vehicle_id',
+      through: 'contact_address_junction',
+      foreignKey: 'address_id',
       otherKey: 'contact_id',
       as: 'contact'
     })

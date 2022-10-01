@@ -1,21 +1,18 @@
 const boom = require('@hapi/boom')
-const UserService = require('./users.services')
-const { encryptPass } = require('../../../utils/auth.utils')
+const VehicleService = require('./vehicles.services')
 
-const service = new UserService()
+const service = new VehicleService()
 
-class UserController {
+class VehicleController {
     async create(req, res, next) {
-        const { body } = req
+        const { body, user } = req
         try {
-            const userExist = await service.findByUsername(body.username)
-            if(userExist) throw boom.conflict('user already exist')
+            const vehicleExist = await service.findByPlateNumber(body.plate_number, user.id)
+            if(vehicleExist) throw boom.conflict('vehicle already exist')
+            if(!body.contact_id) body.user_id = user.id
 
-            body.password = encryptPass(body.password)
-            const newUser = await service.create(body)
-            const {password, ...userWithoutPassword} = newUser.dataValues
-
-            res.status(201).json(userWithoutPassword)
+            const newVehicle = await service.create(body)
+            res.status(201).json(newVehicle.dataValues)
         } catch(error) {
             next(error)
         }
@@ -23,65 +20,73 @@ class UserController {
 
     async findAll(req, res, next) {
         try {
-            const users = await service.findAll()
-            res.status(200).json(users)
+            const vehicles = await service.findAll(req.user.id)
+            res.status(200).json(vehicles)
         } catch(error) {
             next(error)
         }
     }
 
     async findOne(req, res, next) {
+        const { params } = req
         try {
-            const { id } = req.params
-            const user = await service.findOne(id)
-            if(!user) throw boom.notFound('user not found')
+            const vehicle = await service.findOne(params.id)
+            if(!vehicle) throw boom.notFound('vehicle not found')
 
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(200).json(userWithoutPassword)
+            res.status(200).json(vehicle.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
-    async findByRut(req, res, next) {
+    async findMyOwn(req, res, next) {
         try {
-            const { rut } = req.body
-            const user = await service.findByRut(rut)
-            if(!user) throw boom.notFound('user not found')
+            const vehicle = await service.findMyOwn(req.user.id)
+            if(!vehicle) throw boom.notFound('vehicle not found')
 
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(200).json(userWithoutPassword)
+            res.status(200).json(vehicle.dataValues)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async findByPlateNumber(req, res, next) {
+        const { body, user } = req
+        try {
+            const vehicle = await service.findByPlateNumber(body.plate_number, user.id)
+            if(!vehicle) throw boom.notFound('vehicle not found')
+
+            res.status(200).json(vehicle.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
     async updateOne(req, res, next) {
+        const { body, params } = req
         try {
-            const { id } = req.params
-            const userExist = await service.findOne(id)
-            if(!userExist) throw boom.notFound('user not found')
+            const vehicleExist = await service.findOne(params.id)
+            if(!vehicleExist) throw boom.notFound('vehicle not found')
 
-            const user = await service.updateOne(id, req.body)
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(201).json(userWithoutPassword)
+            const vehicle = await service.updateOne(params.id, body)
+            res.status(201).json(vehicle.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
     async deleteOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
-            const userExist = await service.findOne(id)
-            if(!userExist) throw boom.notFound('user not found')
+            const vehicleExist = await service.findOne(id)
+            if(!vehicleExist) throw boom.notFound('vehicle not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'user deleted' })
+            res.status(204).json({ id, message: 'vehicle deleted' })
         } catch(error) {
             next(error)
         }
     }
 }
 
-module.exports = UserController
+module.exports = VehicleController

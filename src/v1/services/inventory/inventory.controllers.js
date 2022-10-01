@@ -1,21 +1,14 @@
 const boom = require('@hapi/boom')
-const UserService = require('./users.services')
-const { encryptPass } = require('../../../utils/auth.utils')
+const InventoryService = require('./inventory.services')
 
-const service = new UserService()
+const service = new InventoryService()
 
-class UserController {
+class InventoryController {
     async create(req, res, next) {
-        const { body } = req
+        const { body, user } = req
         try {
-            const userExist = await service.findByUsername(body.username)
-            if(userExist) throw boom.conflict('user already exist')
-
-            body.password = encryptPass(body.password)
-            const newUser = await service.create(body)
-            const {password, ...userWithoutPassword} = newUser.dataValues
-
-            res.status(201).json(userWithoutPassword)
+            const newItem = await service.create({ ...body, user_id: user.id })
+            res.status(201).json(newItem.dataValues)
         } catch(error) {
             next(error)
         }
@@ -23,65 +16,62 @@ class UserController {
 
     async findAll(req, res, next) {
         try {
-            const users = await service.findAll()
-            res.status(200).json(users)
+            const inventory = await service.findAll(req.user.id)
+            res.status(200).json(inventory)
         } catch(error) {
             next(error)
         }
     }
 
     async findOne(req, res, next) {
+        const { params, user } = req
         try {
-            const { id } = req.params
-            const user = await service.findOne(id)
-            if(!user) throw boom.notFound('user not found')
+            const item = await service.findOne(params.id, user.id)
+            if(!item) throw boom.notFound('item not found')
 
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(200).json(userWithoutPassword)
+            res.status(200).json(item.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
-    async findByRut(req, res, next) {
+    async findItemByName(req, res, next) {
+        const { body, user } = req
         try {
-            const { rut } = req.body
-            const user = await service.findByRut(rut)
-            if(!user) throw boom.notFound('user not found')
+            const item = await service.findItemByName(body.item_name, user.id)
+            if(!item) throw boom.notFound('item not found')
 
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(200).json(userWithoutPassword)
+            res.status(200).json(item.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
     async updateOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
-            const userExist = await service.findOne(id)
-            if(!userExist) throw boom.notFound('user not found')
+            const itemExist = await service.findOne(id, req.user.id)
+            if(!itemExist) throw boom.notFound('item not found')
 
-            const user = await service.updateOne(id, req.body)
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(201).json(userWithoutPassword)
+            const item = await service.updateOne(id, req.body)
+            res.status(201).json(item.dataValues)
         } catch(error) {
             next(error)
         }
     }
 
     async deleteOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
-            const userExist = await service.findOne(id)
-            if(!userExist) throw boom.notFound('user not found')
+            const itemExist = await service.findOne(id, req.user.id)
+            if(!itemExist) throw boom.notFound('item not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'user deleted' })
+            res.status(204).json({ id, message: 'item deleted' })
         } catch(error) {
             next(error)
         }
     }
 }
 
-module.exports = UserController
+module.exports = InventoryController

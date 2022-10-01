@@ -15,7 +15,7 @@ class TaskService {
         return tasks
     }
 
-    async findOne(id) {
+    async findOne(id, user_id) {
         const task = await models.Task.findByPk(id, {
             where: { user_id }
         })

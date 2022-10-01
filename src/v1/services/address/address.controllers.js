@@ -1,5 +1,5 @@
 const boom = require('@hapi/boom')
-const PhoneService = require('./phones.services')
+const PhoneService = require('./address.services')
 
 const service = new PhoneService()
 
@@ -53,7 +53,7 @@ class PhoneController {
     async findByContact(req, res, next) {
         const { body, user } = req
         try {
-            const phones = await service.findByContact(body.contact_id, user.id)
+            const phones = await service.findMyOwn(body.contact_id, user.id)
             if(!phones) throw boom.notFound('phone not found')
 
             res.status(200).json(phones)
@@ -65,7 +65,7 @@ class PhoneController {
     async findByNumber(req, res, next) {
         const { body, user } = req
         try {
-            const phones = await service.findByNumber(body.number, user.id)
+            const phones = await service.findMyOwn(body.number, user.id)
             if(!phones) throw boom.notFound('phone not found')
 
             res.status(200).json(phones)
@@ -77,7 +77,7 @@ class PhoneController {
     async updateOne(req, res, next) {
         const { id } = req.params
         try {
-            const phoneExist = await service.findOne(id, req.user.id)
+            const phoneExist = await service.findOne(id)
             if(!phoneExist) throw boom.notFound('phone not found')
 
             const phone = await service.updateOne(id, req.body)
@@ -90,7 +90,7 @@ class PhoneController {
     async deleteOne(req, res, next) {
         const { id } = req.params
         try {
-            const phoneExist = await service.findOne(id, req.user.id)
+            const phoneExist = await service.findOne(id)
             if(!phoneExist) throw boom.notFound('phone not found')
 
             await service.deleteOne(id)

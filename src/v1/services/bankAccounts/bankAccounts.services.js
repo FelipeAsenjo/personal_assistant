@@ -48,7 +48,7 @@ class BankAccountService {
 
     async findByAccountNumber(account_number, user_id) {
         const bankAccount = await models.BankAccount.findOne({
-            where: { account_number, user_id },
+            where: { '$contact.user_id$': user_id, account_number },
             include: {
                 model: Contact,
                 as: 'contact',
@@ -59,8 +59,8 @@ class BankAccountService {
     }   
 
     async findByRut(rut, user_id) {
-        const bankAccount = await models.BankAccount.findOne({
-            where: { user_id },
+        const bankAccount = await models.BankAccount.findAll({
+            where: { '$contact.user_id$': user_id },
             include: {
                 model: Contact,
                 as: 'contact',
@@ -75,8 +75,8 @@ class BankAccountService {
     }
 
     async findByContact(contact_id, user_id) {
-        const phone = await models.Phone.findOne({
-            where: { contact_id, user_id },
+        const phone = await models.Phone.findAll({
+            where: { '$contact.user_id$': user_id, contact_id },
             include: {
                 model: Contact,
                 as: 'contact',

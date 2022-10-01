@@ -6,10 +6,8 @@ const service = new TaskService()
 class TaskController {
     async create(req, res, next) {
         const { body, user } = req
-        body.user_id = user.id
-
         try {
-            const newTask = await service.create(body)
+            const newTask = await service.create({ ...body, user_id: user.id })
             res.status(201).json(newTask.dataValues)
         } catch(error) {
             next(error)
@@ -17,9 +15,8 @@ class TaskController {
     }
 
     async findAll(req, res, next) {
-        const { id } = req.user
         try {
-            const tasks = await service.findAll(id)
+            const tasks = await service.findAll(req.user.id)
             res.status(200).json(tasks)
         } catch(error) {
             next(error)
@@ -27,9 +24,33 @@ class TaskController {
     }
 
     async findOne(req, res, next) {
-        const { id } = req.params
+        const { params, user } = req
         try {
-            const task = await service.findOne(id)
+            const task = await service.findOne(params.id, user.id)
+            if(!task) throw boom.notFound('task not found')
+
+            res.status(200).json(task)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async findByTitle(req, res, next) {
+        const { body, user } = req
+        try {
+            const task = await service.findByTitle(body.title, user.id)
+            if(!task) throw boom.notFound('task not found')
+
+            res.status(200).json(task)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async findByActive(req, res, next) {
+        const { body, user } = req
+        try {
+            const task = await service.findByActive(body.done, user.id)
             if(!task) throw boom.notFound('task not found')
 
             res.status(200).json(task)
@@ -39,9 +60,9 @@ class TaskController {
     }
 
     async updateOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
-            const taskExist = await service.findOne(id)
+            const taskExist = await service.findOne(id, req.user.id)
             if(!taskExist) throw boom.notFound('task not found')
 
             const task = await service.updateOne(id, req.body)
@@ -52,9 +73,9 @@ class TaskController {
     }
 
     async deleteOne(req, res, next) {
+        const { id } = req.params
         try {
-            const { id } = req.params
-            const task = await service.findOne(id)
+            const task = await service.findOne(id, req.user.id)
             if(!task) throw boom.notFound('task not found')
 
             await service.deleteOne(id)

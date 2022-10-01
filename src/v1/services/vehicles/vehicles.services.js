@@ -1,4 +1,5 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { Contact } = require('../../../libs/sequelize/models/contacts.model')
 const { models } = sequelize
 
 class VehicleService {
@@ -10,13 +11,17 @@ class VehicleService {
     async findAll(user_id) {
         const vehicles = await models.Vehicle.findAll({
             where: { '$contact.user_id$': user_id },
-            include: 'contact'
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
         })
         return vehicles
     }
 
     async findOne(id) {
-        const vehicle = await models.Vehicle.findByPk(id, { include: 'person' })
+        const vehicle = await models.Vehicle.findByPk(id)
         return vehicle
     }
  

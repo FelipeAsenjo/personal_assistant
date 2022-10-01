@@ -30,6 +30,7 @@ const InventorySchema = {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+  tags: DataTypes.JSON,
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE

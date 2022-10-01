@@ -1,21 +1,20 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
-const { Contact } = require('../../../libs/sequelize/models/contacts.model')
 const { models } = sequelize
 
-class PhoneService {
+class AddressService {
     async create(data) {
-        const newPhone = await models.Phone.create(data, {
+        const newAddress = await models.Address.create(data, {
             include: {
                 model: Contact,
                 as: 'contact',
                 include: 'person'
             }
         })
-        return newPhone
+        return newAddress
     }
 
     async findAll(user_id) {
-        const phones = await models.Phone.findAll({
+        const phones = await models.Address.findAll({
             where: { '$contact.user_id$': user_id },
             include: {
                 model: Contact,
@@ -27,7 +26,7 @@ class PhoneService {
     }
 
     async findOne(id, user_id) {
-        const phone = await models.Phone.findByPk(id, {
+        const phone = await models.Address.findByPk(id, {
             where: { user_id },
             include: {
                 model: Contact,
@@ -39,7 +38,7 @@ class PhoneService {
     }
  
     async findMyOwn(user_id) {
-        const phones = await models.Phone.findAll({
+        const phones = await models.Address.findAll({
             where: { user_id },
             include: 'person'
         })
@@ -47,7 +46,7 @@ class PhoneService {
     }
 
     async findByContact(contact_id, user_id) {
-        const phone = await models.Phone.findAll({
+        const phone = await models.Address.findAll({
             where: { contact_id, user_id },
             include: {
                 model: Contact,
@@ -59,7 +58,7 @@ class PhoneService {
     }
 
     async findByNumber(number, user_id) {
-        const phone = await models.Phone.findOne({
+        const phone = await models.Address.findOne({
             where: { number, user_id },
             include: {
                 model: Contact,
@@ -71,16 +70,16 @@ class PhoneService {
     }   
 
     async updateOne(id, changes) {
-        const user = await models.Phone.findByPk(id)
+        const user = await models.Address.findByPk(id)
         const updatedUser = user.update(changes)
         return updatedUser
     }
     
     async deleteOne(id) {
-        const user = await models.Phone.findByPk(id)
+        const user = await models.Address.findByPk(id)
         user.destroy()
         return { id }
     }
 }
 
-module.exports = PhoneService
+module.exports = AddressService
