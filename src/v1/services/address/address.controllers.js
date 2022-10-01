@@ -1,18 +1,18 @@
 const boom = require('@hapi/boom')
-const PhoneService = require('./address.services')
+const AddressService = require('./address.services')
 
-const service = new PhoneService()
+const service = new AddressService()
 
-class PhoneController {
+class AddressController {
     async create(req, res, next) {
         const { body, user } = req
         try {
-            const phoneExist = await service.findByNumber(body.number)
-            if(phoneExist) throw boom.conflict('phone already exist')
+            const addressExist = await service.findByContact(body.contact_id, user.id)
+            if(addressExist) throw boom.conflict('address already exist')
             if(!body.contact_id) body.user_id = user.id
 
-            const newPhone = await service.create(body)
-            res.status(201).json(newPhone.dataValues)
+            const newAddress = await service.create(body)
+            res.status(201).json(newAddress.dataValues)
         } catch(error) {
             next(error)
         }
@@ -20,8 +20,8 @@ class PhoneController {
 
     async findAll(req, res, next) {
         try {
-            const phones = await service.findAll(req.user.id)
-            res.status(200).json(phones)
+            const addresses = await service.findAll(req.user.id)
+            res.status(200).json(addresses.dataValues)
         } catch(error) {
             next(error)
         }
@@ -30,10 +30,10 @@ class PhoneController {
     async findOne(req, res, next) {
         const { params, user } = req
         try {
-            const phone = await service.findOne(params.id, user.id)
-            if(!phone) throw boom.notFound('phone not found')
+            const address = await service.findOne(params.id, user.id)
+            if(!address) throw boom.notFound('address not found')
 
-            res.status(200).json(user.id)
+            res.status(200).json(address.dataValues)
         } catch(error) {
             next(error)
         }
@@ -41,10 +41,10 @@ class PhoneController {
 
     async findMyOwn(req, res, next) {
         try {
-            const phones = await service.findMyOwn(req.user.id)
-            if(!phones) throw boom.notFound('phone not found')
+            const addresses = await service.findMyOwn(req.user.id)
+            if(!addresses) throw boom.notFound('address not found')
 
-            res.status(200).json(phones)
+            res.status(200).json(addresses.dataValues)
         } catch(error) {
             next(error)
         }
@@ -53,22 +53,10 @@ class PhoneController {
     async findByContact(req, res, next) {
         const { body, user } = req
         try {
-            const phones = await service.findMyOwn(body.contact_id, user.id)
-            if(!phones) throw boom.notFound('phone not found')
+            const addresses = await service.findByContact(body.contact_id, user.id)
+            if(!addresses) throw boom.notFound('address not found')
 
-            res.status(200).json(phones)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByNumber(req, res, next) {
-        const { body, user } = req
-        try {
-            const phones = await service.findMyOwn(body.number, user.id)
-            if(!phones) throw boom.notFound('phone not found')
-
-            res.status(200).json(phones)
+            res.status(200).json(addresses.dataValues)
         } catch(error) {
             next(error)
         }
@@ -77,11 +65,11 @@ class PhoneController {
     async updateOne(req, res, next) {
         const { id } = req.params
         try {
-            const phoneExist = await service.findOne(id)
-            if(!phoneExist) throw boom.notFound('phone not found')
+            const addressExist = await service.findOne(id, req.user.id)
+            if(!addressExist) throw boom.notFound('address not found')
 
-            const phone = await service.updateOne(id, req.body)
-            res.status(201).json(phone.dataValues)
+            const address = await service.updateOne(id, req.body)
+            res.status(201).json(address.dataValues)
         } catch(error) {
             next(error)
         }
@@ -90,15 +78,15 @@ class PhoneController {
     async deleteOne(req, res, next) {
         const { id } = req.params
         try {
-            const phoneExist = await service.findOne(id)
-            if(!phoneExist) throw boom.notFound('phone not found')
+            const addressExist = await service.findOne(id, req.user.id)
+            if(!addressExist) throw boom.notFound('address not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'phone deleted' })
+            res.status(204).json({ id, message: 'address deleted' })
         } catch(error) {
             next(error)
         }
     }
 }
 
-module.exports = PhoneController
+module.exports = AddressController

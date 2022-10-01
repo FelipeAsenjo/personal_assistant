@@ -28,7 +28,7 @@ class PhoneService {
 
     async findOne(id, user_id) {
         const phone = await models.Phone.findByPk(id, {
-            where: { user_id },
+            where: { '$contact.user_id$': user_id },
             include: {
                 model: Contact,
                 as: 'contact',
@@ -71,14 +71,14 @@ class PhoneService {
     }   
 
     async updateOne(id, changes) {
-        const user = await models.Phone.findByPk(id)
-        const updatedUser = user.update(changes)
+        const phone = await models.Phone.findByPk(id)
+        const updatedUser = phone.update(changes)
         return updatedUser
     }
     
     async deleteOne(id) {
-        const user = await models.Phone.findByPk(id)
-        user.destroy()
+        const phone = await models.Phone.findByPk(id)
+        phone.destroy()
         return { id }
     }
 }

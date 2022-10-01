@@ -21,7 +21,7 @@ class PhoneController {
     async findAll(req, res, next) {
         try {
             const phones = await service.findAll(req.user.id)
-            res.status(200).json(phones)
+            res.status(200).json(phones.dataValues)
         } catch(error) {
             next(error)
         }
@@ -33,7 +33,7 @@ class PhoneController {
             const phone = await service.findOne(params.id, user.id)
             if(!phone) throw boom.notFound('phone not found')
 
-            res.status(200).json(user.id)
+            res.status(200).json(phone.dataValues)
         } catch(error) {
             next(error)
         }
@@ -44,7 +44,7 @@ class PhoneController {
             const phones = await service.findMyOwn(req.user.id)
             if(!phones) throw boom.notFound('phone not found')
 
-            res.status(200).json(phones)
+            res.status(200).json(phones.dataValues)
         } catch(error) {
             next(error)
         }
@@ -56,7 +56,7 @@ class PhoneController {
             const phones = await service.findByContact(body.contact_id, user.id)
             if(!phones) throw boom.notFound('phone not found')
 
-            res.status(200).json(phones)
+            res.status(200).json(phones.dataValues)
         } catch(error) {
             next(error)
         }
@@ -68,7 +68,7 @@ class PhoneController {
             const phones = await service.findByNumber(body.number, user.id)
             if(!phones) throw boom.notFound('phone not found')
 
-            res.status(200).json(phones)
+            res.status(200).json(phones.dataValues)
         } catch(error) {
             next(error)
         }

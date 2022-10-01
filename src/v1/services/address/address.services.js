@@ -3,18 +3,12 @@ const { models } = sequelize
 
 class AddressService {
     async create(data) {
-        const newAddress = await models.Address.create(data, {
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
-        })
+        const newAddress = await models.Address.create(data)
         return newAddress
     }
 
     async findAll(user_id) {
-        const phones = await models.Address.findAll({
+        const addresses = await models.Address.findAll({
             where: { '$contact.user_id$': user_id },
             include: {
                 model: Contact,
@@ -22,62 +16,50 @@ class AddressService {
                 include: 'person'
             }
         })
-        return phones
+        return addresses
     }
 
     async findOne(id, user_id) {
-        const phone = await models.Address.findByPk(id, {
-            where: { user_id },
+        const address = await models.Address.findByPk(id, {
+            where: { '$contact.user_id$': user_id },
             include: {
                 model: Contact,
                 as: 'contact',
                 include: 'person'
             }
         })
-        return phone
+        return address
     }
  
     async findMyOwn(user_id) {
-        const phones = await models.Address.findAll({
+        const addresses = await models.Address.findAll({
             where: { user_id },
             include: 'person'
         })
-        return phones
+        return addresses
     }
 
     async findByContact(contact_id, user_id) {
-        const phone = await models.Address.findAll({
-            where: { contact_id, user_id },
+        const address = await models.Address.findAll({
+            where: { '$contact.user_id$': user_id, contact_id },
             include: {
                 model: Contact,
                 as: 'contact',
                 include: 'person'
             }
         })
-        return phone
+        return address
     }
 
-    async findByNumber(number, user_id) {
-        const phone = await models.Address.findOne({
-            where: { number, user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
-        })
-        return phone
-    }   
-
     async updateOne(id, changes) {
-        const user = await models.Address.findByPk(id)
-        const updatedUser = user.update(changes)
+        const address = await models.Address.findByPk(id)
+        const updatedUser = address.update(changes)
         return updatedUser
     }
     
     async deleteOne(id) {
-        const user = await models.Address.findByPk(id)
-        user.destroy()
+        const address = await models.Address.findByPk(id)
+        address.destroy()
         return { id }
     }
 }

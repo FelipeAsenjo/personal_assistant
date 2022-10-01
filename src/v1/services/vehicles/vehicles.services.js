@@ -4,7 +4,7 @@ const { models } = sequelize
 
 class VehicleService {
     async create(data) {
-        const newVehicle = await models.Vehicle.create(data, {include: 'person'})
+        const newVehicle = await models.Vehicle.create(data)
         return newVehicle
     }
 
@@ -39,6 +39,18 @@ class VehicleService {
         })
         return vehicle
     }   
+
+    async findByContact(contact_id, user_id) {
+        const vehicle = await models.Vehicle.findAll({
+            where: { '$contact.user_id$': user_id, contact_id },
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
+        return vehicle
+    }
 
     async updateOne(id, changes) {
         const vehicle = await models.Vehicle.findByPk(id)
