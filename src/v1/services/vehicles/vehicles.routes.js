@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./vehicles.controllers')
+const VehicleController = require('./vehicles.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateVehicleSchema,
+    createVehicleSchema,
+    getVehicleSchema
+} = require('./vehicles.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new VehicleController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getVehicleSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createVehicleSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getVehicleSchema, 'params'),
+    validatorHandler(updateVehicleSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getVehicleSchema, 'params'),
     controller.deleteOne
 )
 

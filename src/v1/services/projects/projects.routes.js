@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./projects.controllers')
+const ProjectController = require('./projects.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateProjectSchema,
+    createProjectSchema,
+    getProjectSchema
+} = require('./projects.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new ProjectController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getProjectSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createProjectSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getProjectSchema, 'params'),
+    validatorHandler(updateProjectSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getProjectSchema, 'params'),
     controller.deleteOne
 )
 

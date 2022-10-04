@@ -3,7 +3,7 @@ const SocialMediaService = require('./socialMedia.services')
 
 const service = new SocialMediaService()
 
-class UserController {
+class SocialMediaController {
     async create(req, res, next) {
         const { body, user } = req
         try {
@@ -90,4 +90,4 @@ class UserController {
     }
 }
 
-module.exports = UserController
+module.exports = SocialMediaController

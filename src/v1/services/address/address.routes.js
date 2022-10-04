@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./address.controllers')
+const AddressController = require('./address.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateAddressSchema,
+    createAddressSchema,
+    getAddressSchema
+} = require('./address.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new AddressController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getAddressSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createAddressSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getAddressSchema, 'params'),
+    validatorHandler(updateAddressSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getAddressSchema, 'params'),
     controller.deleteOne
 )
 

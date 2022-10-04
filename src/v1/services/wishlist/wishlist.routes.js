@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./wishlist.controllers')
+const WishlistController = require('./wishlist.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateWishlistSchema,
+    createWishlistSchema,
+    getWishlistSchema
+} = require('./wishlist.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new WishlistController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getWishlistSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createWishlistSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getWishlistSchema, 'params'),
+    validatorHandler(updateWishlistSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getWishlistSchema, 'params'),
     controller.deleteOne
 )
 

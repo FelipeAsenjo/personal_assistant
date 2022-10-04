@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./inventory.controllers')
+const InventoryController = require('./inventory.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateInventorySchema,
+    createInventorySchema,
+    getInventorySchema
+} = require('./inventory.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new InventoryController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getInventorySchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createInventorySchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getInventorySchema, 'params'),
+    validatorHandler(updateInventorySchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getInventorySchema, 'params'),
     controller.deleteOne
 )
 

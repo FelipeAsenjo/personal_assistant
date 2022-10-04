@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./socialMedia.controllers')
+const SocialMediaController = require('./socialMedia.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateSocialMediaSchema,
+    createSocialMediaSchema,
+    getSocialMediaSchema
+} = require('./socialMedia.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new SocialMediaController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getSocialMediaSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createSocialMediaSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getSocialMediaSchema, 'params'),
+    validatorHandler(updateSocialMediaSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getSocialMediaSchema, 'params'),
     controller.deleteOne
 )
 

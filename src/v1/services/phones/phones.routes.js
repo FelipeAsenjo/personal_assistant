@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./phones.controllers')
+const PhoneController = require('./phones.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updatePhonesSchema,
+    createPhonesSchema,
+    getPhonesSchema
+} = require('./phones.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new PhoneController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getPhonesSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createPhonesSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getPhonesSchema, 'params'),
+    validatorHandler(updatePhonesSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getPhonesSchema, 'params'),
     controller.deleteOne
 )
 

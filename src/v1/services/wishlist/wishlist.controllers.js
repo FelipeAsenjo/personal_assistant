@@ -1,5 +1,5 @@
 const boom = require('@hapi/boom')
-const WishlistService = require('./users.services')
+const WishlistService = require('./wishlist.services')
 
 const service = new WishlistService()
 

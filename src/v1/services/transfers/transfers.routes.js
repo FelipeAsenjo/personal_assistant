@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./transfers.controllers')
+const TransferController = require('./transfers.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateTransferSchema,
+    createTransferSchema,
+    getTransferSchema
+} = require('./transfers.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new TransferController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getTransferSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createTransferSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getTransferSchema, 'params'),
+    validatorHandler(updateTransferSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getTransferSchema, 'params'),
     controller.deleteOne
 )
 

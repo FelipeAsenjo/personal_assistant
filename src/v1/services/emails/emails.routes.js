@@ -1,37 +1,37 @@
 const express = require('express')
-const UserController = require('./emails.controllers')
+const EmailController = require('./emails.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
 const { 
-    updateUserSchema,
-    createUserSchema,
-    getUserSchema
-} = require('./users.validations')
+    updateEmailSchema,
+    createEmailSchema,
+    getEmailSchema
+} = require('./emails.validations')
 
 const router = express.Router()
-const controller = new UserController()
+const controller = new EmailController()
 
 router.get('/', 
     controller.findAll
 )
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getEmailSchema, 'params'),
     controller.findOne
 )
 
 router.post('/', 
-    validatorHandler(createUserSchema, 'body'),
+    validatorHandler(createEmailSchema, 'body'),
     controller.create
 )
 
 router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
+    validatorHandler(getEmailSchema, 'params'),
+    validatorHandler(updateEmailSchema, 'body'),
     controller.updateOne
 )
 
 router.delete('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    validatorHandler(getEmailSchema, 'params'),
     controller.deleteOne
 )
 
