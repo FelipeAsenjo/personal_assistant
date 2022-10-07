@@ -79,7 +79,7 @@ class TaskController {
             if(!task) throw boom.notFound('task not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'task deleted' })
+            res.status(200).json({ id, message: 'task deleted' })
         } catch(error) {
             next(error)
         }

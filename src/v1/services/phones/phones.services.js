@@ -72,14 +72,14 @@ class PhoneService {
 
     async updateOne(id, changes) {
         const phone = await models.Phone.findByPk(id)
-        const updatedUser = phone.update(changes)
+        const updatedUser = await phone.update(changes)
         return updatedUser
     }
     
     async deleteOne(id) {
         const phone = await models.Phone.findByPk(id)
-        phone.destroy()
-        return { id }
+        await phone.destroy()
+        return id
     }
 }
 

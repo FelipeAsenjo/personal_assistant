@@ -43,14 +43,14 @@ class ProjectResourcesService {
 
     async updateOne(id, changes) {
         const resource = await models.ProjectResources.findByPk(id)
-        const updatedResource = resource.update(changes)
+        const updatedResource = await resource.update(changes)
         return updatedResource
     }
     
     async deleteOne(id) {
         const resource = await models.ProjectResources.findByPk(id)
-        resource.destroy()
-        return { id }
+        await resource.destroy()
+        return id
     }
 }
 

@@ -60,14 +60,14 @@ class VehicleService {
 
     async updateOne(id, changes) {
         const vehicle = await models.Vehicle.findByPk(id)
-        const updatedVehicle = vehicle.update(changes)
+        const updatedVehicle = await vehicle.update(changes)
         return updatedVehicle
     }
     
     async deleteOne(id) {
         const vehicle = await models.Vehicle.findByPk(id)
-        vehicle.destroy()
-        return { id }
+        await vehicle.destroy()
+        return id
     }
 }
 

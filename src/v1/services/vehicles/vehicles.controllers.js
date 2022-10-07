@@ -82,7 +82,7 @@ class VehicleController {
             if(!vehicleExist) throw boom.notFound('vehicle not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'vehicle deleted' })
+            res.status(200).json({ id, message: 'vehicle deleted' })
         } catch(error) {
             next(error)
         }

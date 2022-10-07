@@ -96,7 +96,7 @@ class PeopleController {
             if(!personExist) throw boom.notFound('person not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'person deleted' })
+            res.status(200).json({ id, message: 'person deleted' })
         } catch(error) {
             next(error)
         }

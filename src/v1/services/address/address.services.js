@@ -60,14 +60,14 @@ class AddressService {
 
     async updateOne(id, changes) {
         const address = await models.Address.findByPk(id)
-        const updatedUser = address.update(changes)
+        const updatedUser = await address.update(changes)
         return updatedUser
     }
     
     async deleteOne(id) {
         const address = await models.Address.findByPk(id)
-        address.destroy()
-        return { id }
+        await address.destroy()
+        return id
     }
 }
 

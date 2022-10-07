@@ -43,14 +43,14 @@ class TaskService {
     
     async updateOne(id, changes) {
         const task = await models.Task.findByPk(id)
-        const updatedTask = task.update(changes)
+        const updatedTask = await task.update(changes)
         return updatedTask
     }
     
     async deleteOne(id) {
         const task = await models.Task.findByPk(id)
-        task.destroy()
-        return { id }
+        await task.destroy()
+        return id
     }
 }
 

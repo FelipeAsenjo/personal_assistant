@@ -81,7 +81,7 @@ class WishlistController {
             if(!wishExist) throw boom.notFound('wish not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'wish deleted' })
+            res.status(200).json({ id, message: 'wish deleted' })
         } catch(error) {
             next(error)
         }

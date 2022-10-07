@@ -94,14 +94,14 @@ class BankAccountService {
 
     async updateOne(id, changes) {
         const bankAccount = await models.BankAccount.findByPk(id)
-        const updatedAccount = bankAccount.update(changes)
+        const updatedAccount = await bankAccount.update(changes)
         return updatedAccount
     }
     
     async deleteOne(id) {
         const bankAccount = await models.BankAccount.findByPk(id)
-        bankAccount.destroy()
-        return { id }
+        await bankAccount.destroy()
+        return id
     }
 }
 

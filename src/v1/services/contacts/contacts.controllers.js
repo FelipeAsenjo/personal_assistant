@@ -9,7 +9,10 @@ class ContactController {
         try {
             const contactExist = await searchByMulti(body.person, user.id)
             if(contactExist) return res.status(200).json({
-                message: 'contact already exist',
+                error: {
+                    message: 'contact already exist',
+                    type: 409
+                },
                 ...contactExist
             })
 
@@ -22,8 +25,8 @@ class ContactController {
 
     async findAll(req, res, next) {
         try {
-            const contact = await service.findAll(req.user.id)
-            res.status(200).json(contact)
+            const contacts = await service.findAll(req.user.id)
+            res.status(200).json(contacts)
         } catch(error) {
             next(error)
         }
@@ -37,7 +40,7 @@ class ContactController {
                 await this.findContact(req.body, req.user.id)
             if(!contact) throw boom.notFound('contact not found')
 
-            res.status(200).json(contact.dataValues)
+            res.status(200).json(contact)
         } catch(error) {
             next(error)
         }
@@ -46,10 +49,10 @@ class ContactController {
     async findContact(req, res, next) {
         const { body, user } = req
         try {
-            const contact = await searchByMulti(body, user.id)
+            const contact = await searchByMulti(body.person, user.id)
             if(!contact) throw boom.notFound('contact not found')
 
-            res.status(200).json(contact.dataValues)
+            res.status(200).json(contact)
         } catch(error) {
             next(error)
         }
@@ -62,7 +65,7 @@ class ContactController {
             if(!contactExist) throw boom.notFound('contact not found')
 
             const contact = await service.updateOne(id, req.body)
-            res.status(201).json(contact.dataValues)
+            res.status(201).json(contact)
         } catch(error) {
             next(error)
         }
@@ -91,23 +94,23 @@ const searchByMulti = async (contact, user_id) => {
         try {
             if(rut) {
                 const contactByRut = await service.findByRut(rut, user_id)
-                if(!contactByRut) throw boom.notFound('contact not found')
-                return contactByRut.dataValues
+                if(contactByRut) return contactByRut
+                return false
             } 
             if(email) {
                 const contactByEmail = await service.findByEmail(email, user_id)
-                if(!contactByEmail) throw boom.notFound('contact not found')
-                return contactByEmail.dataValues
+                if(contactByEmail) return contactByEmail
+                return false
             } 
             if(alias) {
                 const contactByAlias = await service.findByAlias(alias, user_id)
-                if(!contactByAlias) throw boom.notFound('contact not found')
-                return contactByAlias.dataValues
+                if(contactByAlias) return contactByAlias
+                return false
             } 
 
             return false
         } catch(error) {
-            next(error)
+            throw new Error(error)
         }
     }
 

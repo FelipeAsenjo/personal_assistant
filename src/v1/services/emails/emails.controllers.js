@@ -94,7 +94,7 @@ class EmailController {
             if(!emailExist) throw boom.notFound('email not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'email deleted' })
+            res.status(200).json({ id, message: 'email deleted' })
         } catch(error) {
             next(error)
         }

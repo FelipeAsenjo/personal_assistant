@@ -78,7 +78,7 @@ class ProjectResourcesController {
             if(!resourceExist) throw boom.notFound('resource not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'resource deleted' })
+            res.status(200).json({ id, message: 'resource deleted' })
         } catch(error) {
             next(error)
         }

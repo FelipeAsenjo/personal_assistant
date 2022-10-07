@@ -70,7 +70,7 @@ class ProjectController {
             if(!projectExist) throw boom.notFound('project not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'project deleted' })
+            res.status(200).json({ id, message: 'project deleted' })
         } catch(error) {
             next(error)
         }

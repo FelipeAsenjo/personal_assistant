@@ -63,14 +63,14 @@ class TransferService {
 
     async updateOne(id, changes) {
         const transfer = await models.Transfer.findByPk(id)
-        const updatedTransfer = transfer.update(changes)
+        const updatedTransfer = await transfer.update(changes)
         return updatedTransfer
     }
     
     async deleteOne(id) {
         const transfer = await models.Transfer.findByPk(id)
-        transfer.destroy()
-        return { id }
+        await transfer.destroy()
+        return id
     }
 }
 

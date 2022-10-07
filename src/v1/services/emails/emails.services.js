@@ -72,14 +72,14 @@ class EmailService {
 
     async updateOne(id, changes) {
         const email = await models.Email.findByPk(id)
-        const updatedEmail = email.update(changes)
+        const updatedEmail = await email.update(changes)
         return updatedEmail
     }
     
     async deleteOne(id) {
         const email = await models.Email.findByPk(id)
-        email.destroy()
-        return { id }
+        await email.destroy()
+        return id
     }
 }
 

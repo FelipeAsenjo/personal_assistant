@@ -50,15 +50,19 @@ class ContactService {
     }
 
     async updateOne(id, changes) {
-        const contact = await models.Contact.findByPk(id)
-        const updatedUser = contact.update(changes)
-        return updatedUser
+        const { person, ...contactChanges } = changes
+
+        const contact = await models.Contact.findByPk(id, { include: 'person' })
+        if(person) await contact.person.update(person)
+
+        const updatedContact = await contact.update(contactChanges)
+        return updatedContact
     }
     
     async deleteOne(id) {
         const contact = await models.Contact.findByPk(id)
-        contact.destroy()
-        return { id }
+        await contact.destroy()
+        return id
     }
 }
 

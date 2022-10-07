@@ -8,36 +8,36 @@ class InventoryService {
     }
 
     async findAll(user_id) {
-        const Inventory = await models.Inventory.findAll({
+        const inventory = await models.Inventory.findAll({
             where: { user_id }
         })
-        return Inventory
+        return inventory
     }
 
     async findOne(id, user_id) {
-        const Item = await models.Inventory.findByPk(id, {
+        const item = await models.Inventory.findByPk(id, {
             where: { user_id }
         })
-        return Item
+        return item
     }
  
     async findItemByName(item_name, user_id) {
-        const Item = await models.Inventory.findAll({
+        const item = await models.Inventory.findAll({
             where: { item_name, user_id }
         })
-        return Item
+        return item
     }   
 
     async updateOne(id, changes) {
-        const Item = await models.Inventory.findByPk(id)
-        const updatedItem = Item.update(changes)
+        const item = await models.Inventory.findByPk(id)
+        const updatedItem = await item.update(changes)
         return updatedItem
     }
     
     async deleteOne(id) {
-        const Item = await models.Inventory.findByPk(id)
-        Item.destroy()
-        return { id }
+        const item = await models.Inventory.findByPk(id)
+        await item.destroy()
+        return id
     }
 }
 

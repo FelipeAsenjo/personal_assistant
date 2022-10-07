@@ -82,7 +82,7 @@ class AddressController {
             if(!addressExist) throw boom.notFound('address not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'address deleted' })
+            res.status(200).json({ id, message: 'address deleted' })
         } catch(error) {
             next(error)
         }

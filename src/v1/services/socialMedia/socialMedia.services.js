@@ -64,14 +64,14 @@ class SocialMediaService {
 
     async updateOne(id, changes) {
         const socialMedia = await models.SocialMedia.findByPk(id)
-        const updatedSocialMedia = socialMedia.update(changes)
+        const updatedSocialMedia = await socialMedia.update(changes)
         return updatedSocialMedia
     }
     
     async deleteOne(id) {
         const socialMedia = await models.SocialMedia.findByPk(id)
-        socialMedia.destroy()
-        return { id }
+        await socialMedia.destroy()
+        return id
     }
 }
 

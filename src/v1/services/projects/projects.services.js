@@ -32,14 +32,14 @@ class ProjectService {
 
     async updateOne(id, changes) {
         const project = await models.Project.findByPk(id)
-        const updatedProject = project.update(changes)
+        const updatedProject = await project.update(changes)
         return updatedProject
     }
     
     async deleteOne(id) {
         const project = await models.Project.findByPk(id)
-        project.destroy()
-        return { id }
+        await project.destroy()
+        return id
     }
 }
 

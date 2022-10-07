@@ -94,7 +94,7 @@ class PhoneController {
             if(!phoneExist) throw boom.notFound('phone not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'phone deleted' })
+            res.status(200).json({ id, message: 'phone deleted' })
         } catch(error) {
             next(error)
         }

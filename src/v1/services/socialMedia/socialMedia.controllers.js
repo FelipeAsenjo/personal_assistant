@@ -83,7 +83,7 @@ class SocialMediaController {
             if(!socialMediaExist) throw boom.notFound('social media not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'social media deleted' })
+            res.status(200).json({ id, message: 'social media deleted' })
         } catch(error) {
             next(error)
         }

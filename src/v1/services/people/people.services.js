@@ -34,14 +34,14 @@ class PeopleService {
 
     async updateOne(id, changes) {
         const person = await models.Person.findByPk(id)
-        const updatedPerson = person.update(changes)
+        const updatedPerson = await person.update(changes)
         return updatedPerson
     }
     
     async deleteOne(id) {
         const person = await models.Person.findByPk(id)
-        person.destroy()
-        return { id }
+        await person.destroy()
+        return id
     }
 }
 

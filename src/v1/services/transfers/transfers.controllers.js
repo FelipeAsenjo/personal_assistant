@@ -103,7 +103,7 @@ class TransferController {
             if(!transferExist) throw boom.notFound('transfer not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'transfer deleted' })
+            res.status(200).json({ id, message: 'transfer deleted' })
         } catch(error) {
             next(error)
         }

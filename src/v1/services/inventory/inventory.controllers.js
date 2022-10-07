@@ -67,7 +67,7 @@ class InventoryController {
             if(!itemExist) throw boom.notFound('item not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'item deleted' })
+            res.status(200).json({ id, message: 'item deleted' })
         } catch(error) {
             next(error)
         }

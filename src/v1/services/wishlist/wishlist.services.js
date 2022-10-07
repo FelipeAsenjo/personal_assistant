@@ -41,14 +41,14 @@ class WishlistService {
 
     async updateOne(id, changes) {
         const wish = await models.Wishlist.findByPk(id)
-        const updatedWish = wish.update(changes)
+        const updatedWish = await wish.update(changes)
         return updatedWish
     }
     
     async deleteOne(id) {
         const wish = await models.Wishlist.findByPk(id)
-        wish.destroy()
-        return { id }
+        await wish.destroy()
+        return id
     }
 }
 

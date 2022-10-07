@@ -36,4 +36,9 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findContact', 
+    validatorHandler(updateContactSchema, 'body'),
+    controller.findContact
+)
+
 module.exports = router
