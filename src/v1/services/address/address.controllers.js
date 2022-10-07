@@ -5,7 +5,7 @@ const service = new AddressService()
 
 class AddressController {
     async create(req, res, next) {
-        const { body, user } = req
+        const { body, user, baseUrl, params } = req
         try {
             const addressExist = await service.findByContact(body.contact_id, user.id)
             if(addressExist) throw boom.conflict('address already exist')

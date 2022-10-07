@@ -4,7 +4,13 @@ const { models } = sequelize
 
 class SocialMediaService {
     async create(data) {
-        const newSocialMedia = await models.SocialMedia.create(data, {include: 'person'})
+        const newSocialMedia = await models.SocialMedia.create(data, {
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return newSocialMedia
     }
 

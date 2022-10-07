@@ -35,4 +35,9 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findByRut',
+    validatorHandler(updateUserSchema, 'body'),
+    controller.findByRut
+)
+
 module.exports = router

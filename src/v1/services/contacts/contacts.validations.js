@@ -1,38 +1,29 @@
 const Joi = require('joi')
+const { updatePersonSchema: person }  = require('../people/people.validations')
+const { updateEmailSchema: email }  = require('../emails/emails.validations')
 
 const id = Joi.string().guid()
-const name = Joi.string().max(50)
-const last_name = Joi.string().max(50)
 const alias = Joi.string().max(50)
-const birthday = Joi.date()
-const rut = Joi.string().min(9).max(10)
-const email = Joi.string().email().max(50)
 const blocked = Joi.bool()
 const favorite = Joi.bool()
-const person = Joi.object({
-  name,
-  last_name,
-  birthday,
-  rut
-})
 
 const createContactSchema = Joi.object({                                                       
-  person,
   alias,
   favorite,
-  blocked
+  blocked,
+  person,
 })
 
 const updateContactSchema = Joi.object({                                                       
-  person,
   alias,
   favorite,
-  blocked
+  blocked,
+  person,
 })
 
 const getContactSchema = Joi.object({
   id,
-  rut,
+  person,
   email,
   alias,
 })

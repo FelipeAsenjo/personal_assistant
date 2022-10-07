@@ -4,7 +4,13 @@ const { models } = sequelize
 
 class VehicleService {
     async create(data) {
-        const newVehicle = await models.Vehicle.create(data)
+        const newVehicle = await models.Vehicle.create(data, {
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return newVehicle
     }
 

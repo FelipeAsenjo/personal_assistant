@@ -29,22 +29,26 @@ class UserService {
 
     async findByRut(rut) {
         const user = await models.User.findOne({
-            where: { '$person.rut$' : rut },
+            where: { '$person.rut$': rut },
             include: 'person'
         })
         return user
     }
 
     async updateOne(id, changes) {
-        const user = await models.User.findByPk(id)
-        const updatedUser = user.update(changes)
+        const { person, ...userChanges } = changes
+
+        const user = await models.User.findByPk(id, { include: 'person' })
+        if(person) await user.person.update(person)
+
+        const updatedUser = await user.update(userChanges)
         return updatedUser
     }
     
     async deleteOne(id) {
         const user = await models.User.findByPk(id)
-        user.destroy()
-        return { id }
+        await user.destroy()
+        return id
     }
 }
 

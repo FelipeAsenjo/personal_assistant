@@ -1,9 +1,16 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { Contact } = require('../../../libs/sequelize/models/contacts.model')
 const { models } = sequelize
 
 class AddressService {
     async create(data) {
-        const newAddress = await models.Address.create(data)
+        const newAddress = await models.Address.create(data, {
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return newAddress
     }
 

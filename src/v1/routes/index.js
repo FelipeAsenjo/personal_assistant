@@ -19,13 +19,35 @@ const { isAuthenticated, hasRole } = require('../../middlewares/auth.handler')
 
 const router = express.Router()
 
-router.use('/auth', auth)
-router.use('/users', isAuthenticated, hasRole([0, 1]), users)
+const contactsPath = '/contacts/:contact_id'
 
-// we are receiveing id and role from cookies
-// so we don't need to nest other routers into users
-router.use('/tasks',
- isAuthenticated, 
-tasks)
+router.use('/auth', auth)
+router.use('/users', 
+    // isAuthenticated,
+    // hasRole([0, 1]),
+    users
+)
+router.use(`/address`, isAuthenticated, address)
+router.use(`${contactsPath}/address`, isAuthenticated, address)
+router.use(`/bankAccounts`, isAuthenticated, bankAccounts)
+router.use(`${contactsPath}/bankAccounts`, isAuthenticated, bankAccounts)
+router.use(`/contacts`, isAuthenticated, contacts)
+router.use(`/emails`, isAuthenticated, emails)
+router.use(`${contactsPath}/emails`, isAuthenticated, emails)
+router.use(`/inventory`, isAuthenticated, inventory)
+router.use(`/people`, isAuthenticated, people)
+router.use(`/phones`, isAuthenticated, phones)
+router.use(`${contactsPath}/phones`, isAuthenticated, phones)
+router.use(`/projectResources`, isAuthenticated, projectResources)
+router.use(`/projects`, isAuthenticated, projects)
+router.use(`/socialMedia`, isAuthenticated, socialMedia)
+router.use(`${contactsPath}/socialMedia`, isAuthenticated, socialMedia)
+router.use(`/tasks`, isAuthenticated, tasks)
+router.use(`/transfers`, isAuthenticated, transfers)
+router.use(`${contactsPath}/transfers`, isAuthenticated, transfers)
+router.use(`/vehicles`, isAuthenticated, vehicles)
+router.use(`${contactsPath}/vehicles`, isAuthenticated, vehicles)
+router.use(`/wishlist`, isAuthenticated, wishlist)
+
 
 module.exports = router

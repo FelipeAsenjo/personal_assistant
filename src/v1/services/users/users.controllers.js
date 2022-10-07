@@ -6,6 +6,7 @@ const service = new UserService()
 
 class UserController {
     async create(req, res, next) {
+        console.log(req.baseUrl)
         const { body } = req
         try {
             const userExist = await service.findByUsername(body.username)
@@ -44,9 +45,9 @@ class UserController {
     }
 
     async findByRut(req, res, next) {
+        const { person } = req.body
         try {
-            const { rut } = req.body
-            const user = await service.findByRut(rut)
+            const user = await service.findByRut(person.rut)
             if(!user) throw boom.notFound('user not found')
 
             const {password, ...userWithoutPassword} = user.dataValues
@@ -77,7 +78,7 @@ class UserController {
             if(!userExist) throw boom.notFound('user not found')
 
             await service.deleteOne(id)
-            res.status(204).json({ id, message: 'user deleted' })
+            res.status(200).json({ id, message: 'user deleted' })
         } catch(error) {
             next(error)
         }

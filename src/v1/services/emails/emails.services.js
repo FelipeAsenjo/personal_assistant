@@ -5,7 +5,13 @@ const { models } = sequelize
 
 class EmailService {
     async create(data) {
-        const newEmail = await models.Email.create(data)
+        const newEmail = await models.Email.create(data, {
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return newEmail
     }
 

@@ -6,7 +6,13 @@ const { models } = sequelize
 
 class BankAccountService {
     async create(data) {
-        const newBankAccount = await models.BankAccount.create(data)
+        const newBankAccount = await models.BankAccount.create(data, {
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return newBankAccount
     }
 

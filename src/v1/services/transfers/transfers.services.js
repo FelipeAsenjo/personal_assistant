@@ -4,7 +4,13 @@ const { models } = sequelize
 
 class TransferService {
     async create(data) {
-        const newTransfer = await models.Transfer.create(data, {include: 'person'})
+        const newTransfer = await models.Transfer.create(data, {
+            include: {
+                model: Contact,
+                as: 'contact',
+                include: 'person'
+            }
+        })
         return newTransfer
     }
 

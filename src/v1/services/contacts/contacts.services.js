@@ -34,7 +34,7 @@ class ContactService {
     }
 
     async findByAlias(alias, user_id) {
-        const contact = await models.Contact.findOne({
+        const contact = await models.Contact.findAll({
             where: { alias, user_id },
             include: 'person'
         })

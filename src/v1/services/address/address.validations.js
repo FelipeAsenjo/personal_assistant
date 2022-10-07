@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { updateContactSchema: contact } = require('../contacts/contacts.validations')
 
 const id = Joi.string().guid()
 const street = Joi.string()
@@ -17,6 +18,7 @@ const createAddressSchema = Joi.object({
   state,
   country,
   tag,
+  contact
 })
 
 const updateAddressSchema = Joi.object({                                                       
@@ -27,6 +29,7 @@ const updateAddressSchema = Joi.object({
   state,
   country,
   tag,
+  contact
 })
 
 const getAddressSchema = Joi.object({

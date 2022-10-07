@@ -1,19 +1,10 @@
 const Joi = require('joi')
+const { updatePersonSchema: person }  = require('../people/people.validations')
 
 const id = Joi.string().guid()
 const username = Joi.string().email().max(50)
 const password = Joi.string().min(8)
 const role = Joi.number().min(0).max(5)
-const name = Joi.string().max(50)
-const last_name = Joi.string().max(50)
-const birthday = Joi.date()
-const rut = Joi.string().min(9).max(10)
-const person = Joi.object({
-  name,
-  last_name,
-  birthday,
-  rut
-})
 
 const createUserSchema = Joi.object({                                                       
   username: username.required(),
