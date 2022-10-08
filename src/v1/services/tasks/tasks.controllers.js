@@ -48,9 +48,8 @@ class TaskController {
     }
 
     async findByActive(req, res, next) {
-        const { body, user } = req
         try {
-            const task = await service.findByActive(body.done, user.id)
+            const task = await service.findByActive(req.user.id)
             if(!task) throw boom.notFound('task not found')
 
             res.status(200).json(task)
