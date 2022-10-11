@@ -7,7 +7,7 @@ class ProjectController {
     async create(req, res, next) {
         const { body, user } = req
         try {
-            const projectExist = await service.findByProjectName(body.project_name, user.id)
+            const projectExist = await service.findByProjectName(body.title, user.id)
             if(projectExist) throw boom.conflict('project already exist')
 
             const newproject = await service.create({ ...body, user_id: user.id })

@@ -24,10 +24,10 @@ class ProjectService {
     }
  
     async findByProjectName(title, user_id) {
-        const Item = await models.Project.findAll({
+        const project = await models.Project.findAll({
             where: { title, user_id }
         })
-        return Item
+        return project
     }   
 
     async updateOne(id, changes) {

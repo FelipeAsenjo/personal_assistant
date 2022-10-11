@@ -24,7 +24,10 @@ class TaskService {
  
     async findByTitle(title, user_id) {
         const task = await models.Task.findAll({
-            where: { title, user_id }
+            where: { 
+               title: { [Op.like]: `%${title}%`}, 
+               user_id 
+            }
         })
         return task
     }   
