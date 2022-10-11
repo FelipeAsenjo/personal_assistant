@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { models } = sequelize
 
@@ -25,7 +26,10 @@ class ProjectService {
  
     async findByProjectName(title, user_id) {
         const project = await models.Project.findAll({
-            where: { title, user_id }
+            where: { 
+                title: { [Op.like]: `%${title}%` }, 
+                user_id 
+            }
         })
         return project
     }   

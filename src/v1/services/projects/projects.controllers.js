@@ -7,11 +7,8 @@ class ProjectController {
     async create(req, res, next) {
         const { body, user } = req
         try {
-            const projectExist = await service.findByProjectName(body.title, user.id)
-            if(projectExist) throw boom.conflict('project already exist')
-
             const newproject = await service.create({ ...body, user_id: user.id })
-            res.status(201).json(newproject.dataValues)
+            res.status(201).json(newproject)
         } catch(error) {
             next(error)
         }
@@ -32,7 +29,7 @@ class ProjectController {
             const project = await service.findOne(params.id, user.id)
             if(!project) throw boom.notFound('project not found')
 
-            res.status(200).json(project.dataValues)
+            res.status(200).json(project)
         } catch(error) {
             next(error)
         }
@@ -41,10 +38,10 @@ class ProjectController {
     async findByProjectName(req, res, next) {
         const { body, user } = req
         try {
-            const project = await service.findByProjectName(body.project_name, user.id)
+            const project = await service.findByProjectName(body.title, user.id)
             if(!project) throw boom.notFound('project not found')
 
-            res.status(200).json(project.dataValues)
+            res.status(200).json(project)
         } catch(error) {
             next(error)
         }
@@ -57,7 +54,7 @@ class ProjectController {
             if(!projectExist) throw boom.notFound('project not found')
 
             const project = await service.updateOne(id, req.body)
-            res.status(201).json(project.dataValues)
+            res.status(201).json(project)
         } catch(error) {
             next(error)
         }

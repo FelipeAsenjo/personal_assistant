@@ -35,4 +35,9 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findByName', 
+    validatorHandler(updateProjectSchema, 'body'),
+    controller.findByProjectName
+)
+
 module.exports = router
