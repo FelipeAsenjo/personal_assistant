@@ -4,7 +4,9 @@ const { models } = sequelize
 
 class ProjectService {
     async create(data) {
-        const newProject = await models.Project.create(data)
+        const newProject = await models.Project.create(data, {
+            include: 'owner'
+        })
         return newProject
     }
 

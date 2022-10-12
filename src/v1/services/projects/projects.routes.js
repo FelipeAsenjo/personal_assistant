@@ -1,6 +1,7 @@
 const express = require('express')
 const ProjectController = require('./projects.controllers')
 const validatorHandler = require('../../../middlewares/validator.handler')
+const resourcesRoutes = require('../projectResources/projectResources.routes')
 const { 
     updateProjectSchema,
     createProjectSchema,
@@ -39,5 +40,7 @@ router.post('/findByName',
     validatorHandler(updateProjectSchema, 'body'),
     controller.findByProjectName
 )
+
+router.use('/:project_id/resources', resourcesRoutes)
 
 module.exports = router

@@ -18,7 +18,8 @@ const updateProjectResourcesSchema = Joi.object({
 })
 
 const getProjectResourcesSchema = Joi.object({
-  id: id.required()
+  id: id.required(),
+  project_id: id.required()
 })
  
 module.exports = { createProjectResourcesSchema, updateProjectResourcesSchema, getProjectResourcesSchema }  

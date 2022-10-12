@@ -5,17 +5,24 @@ const service = new ProjectResourcesService()
 
 class ProjectResourcesController {
     async create(req, res, next) {
+        const { body, user } = req
+        const { project_id } = req.params
         try {
-            const newResource = await service.create(req.body)
-            res.status(201).json(newResource.dataValues)
+            const newResource = await service.create(
+                project_id, 
+                user.id, 
+                { ...body, project_id }
+            )
+            res.status(201).json(newResource)
         } catch(error) {
             next(error)
         }
     }
 
     async findAll(req, res, next) {
+        const { project_id } = req.params
         try {
-            const resources = await service.findAll(req.user.id)
+            const resources = await service.findAll(req.user.id, project_id)
             res.status(200).json(resources)
         } catch(error) {
             next(error)
@@ -25,47 +32,31 @@ class ProjectResourcesController {
     async findOne(req, res, next) {
         const { params, user } = req
         try {
-            const resource = await service.findOne(params.id, user.id)
+            const resource = await service.findOne(
+                params.id,
+                user.id, 
+                params.project_id
+            )
             if(!resource) throw boom.notFound('resource not found')
 
-            res.status(200).json(resource.dataValues)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByProjectId(req, res, next) {
-        const { body, user } = req
-        try {
-            const resource = await service.findByProjectId(body.project_id, user.id)
-            if(!resource) throw boom.notFound('resource not found')
-
-            res.status(200).json(resource.dataValues)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByProjectName(req, res, next) {
-        const { body, user } = req
-        try {
-            const resource = await service.findByProjectName(body.title, user.id)
-            if(!resource) throw boom.notFound('resource not found')
-
-            res.status(200).json(resource.dataValues)
+            res.status(200).json(resource)
         } catch(error) {
             next(error)
         }
     }
 
     async updateOne(req, res, next) {
-        const { id } = req.params
+        const { params, user } = req
         try {
-            const resourceExist = await service.findOne(id, req.user.id)
+            const resourceExist = await service.findOne(
+                params.id, 
+                user.id,
+                params.project_id
+            )
             if(!resourceExist) throw boom.notFound('resource not found')
 
-            const resource = await service.updateOne(id, req.body)
-            res.status(201).json(resource.dataValues)
+            const resource = await service.updateOne(params.id, req.body)
+            res.status(201).json(resource)
         } catch(error) {
             next(error)
         }
