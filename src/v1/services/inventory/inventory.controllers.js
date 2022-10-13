@@ -8,7 +8,7 @@ class InventoryController {
         const { body, user } = req
         try {
             const newItem = await service.create({ ...body, user_id: user.id })
-            res.status(201).json(newItem.dataValues)
+            res.status(201).json(newItem)
         } catch(error) {
             next(error)
         }
@@ -29,7 +29,7 @@ class InventoryController {
             const item = await service.findOne(params.id, user.id)
             if(!item) throw boom.notFound('item not found')
 
-            res.status(200).json(item.dataValues)
+            res.status(200).json(item)
         } catch(error) {
             next(error)
         }
@@ -41,7 +41,7 @@ class InventoryController {
             const item = await service.findItemByName(body.item_name, user.id)
             if(!item) throw boom.notFound('item not found')
 
-            res.status(200).json(item.dataValues)
+            res.status(200).json(item)
         } catch(error) {
             next(error)
         }
@@ -54,7 +54,7 @@ class InventoryController {
             if(!itemExist) throw boom.notFound('item not found')
 
             const item = await service.updateOne(id, req.body)
-            res.status(201).json(item.dataValues)
+            res.status(201).json(item)
         } catch(error) {
             next(error)
         }

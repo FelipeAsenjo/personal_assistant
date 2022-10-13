@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { models } = sequelize
 
@@ -23,7 +24,10 @@ class InventoryService {
  
     async findItemByName(item_name, user_id) {
         const item = await models.Inventory.findAll({
-            where: { item_name, user_id }
+            where: { 
+                item_name: { [Op.like]: `%${item_name}%` }, 
+                user_id 
+            }
         })
         return item
     }   

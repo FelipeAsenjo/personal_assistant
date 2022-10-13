@@ -41,6 +41,4 @@ router.post('/findByName',
     controller.findByProjectName
 )
 
-router.use('/:project_id/resources', resourcesRoutes)
-
 module.exports = router

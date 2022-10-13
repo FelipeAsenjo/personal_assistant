@@ -10,7 +10,7 @@ class PeopleController {
             if(personExist) throw boom.conflict('person already exist')
 
             const newPerson = await service.create(body)
-            res.status(201).json(newPerson.dataValues)
+            res.status(201).json(newPerson)
         } catch(error) {
             next(error)
         }
@@ -38,7 +38,7 @@ class PeopleController {
 
     async findPerson(req, res, next) {
         try {
-            const person = await this.searchByMulti(req.body)
+            const person = await searchByMulti(req.body)
             if(!person) throw boom.notFound('person not found')
 
             res.status(200).json(person.dataValues)
@@ -47,34 +47,6 @@ class PeopleController {
         }
     }
 
-    async searchByMulti(body) {
-        const { rut, last_name, name } = body
-        const personExist = async () => {
-            try {
-                if(rut) {
-                    const personByRut = await service.findByRut(rut)
-                    if(!personByRut) throw boom.notFound('person not found')
-                    return personByRut
-                } 
-                if(lastName) {
-                    const personByLastName = await service.findByEmail(last_name)
-                    if(!personByLastName) throw boom.notFound('person not found')
-                    return personByLastName
-                } 
-                if(name) {
-                    const personByName = await service.findByAlias(name)
-                    if(!personByName) throw boom.notFound('person not found')
-                    return personByName
-                } 
-
-                return false
-            } catch(error) {
-                next(error)
-            }
-        }
-
-        return personExist
-    }
 
     async updateOne(req, res, next) {
         const { id } = req.params
@@ -101,6 +73,35 @@ class PeopleController {
             next(error)
         }
     }
+}
+
+const searchByMulti = async (body) => {
+    const { rut, last_name, name } = body
+    const personExist = async () => {
+        try {
+            if(rut) {
+                const personByRut = await service.findByRut(rut)
+                if(!personByRut) throw boom.notFound('person not found')
+                return personByRut
+            } 
+            if(last_name) {
+                const personByLastName = await service.findByEmail(last_name)
+                if(!personByLastName) throw boom.notFound('person not found')
+                return personByLastName
+            } 
+            if(name) {
+                const personByName = await service.findByAlias(name)
+                if(!personByName) throw boom.notFound('person not found')
+                return personByName
+            } 
+
+            return false
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    return personExist()
 }
 
 module.exports = PeopleController
