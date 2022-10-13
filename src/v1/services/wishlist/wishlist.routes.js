@@ -35,4 +35,14 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findByName', 
+    validatorHandler(updateWishlistSchema, 'body'),
+    controller.findByItemName
+)
+
+router.post('/findByfavorite', 
+    validatorHandler(updateWishlistSchema, 'body'),
+    controller.findByFavorite
+)
+
 module.exports = router

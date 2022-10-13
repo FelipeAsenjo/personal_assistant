@@ -9,7 +9,9 @@ class WishlistService {
     }
 
     async findAll(user_id) {
-        const wishes = await models.Wishlist.findAll({where: { user_id }})
+        const wishes = await models.Wishlist.findAll({
+            where: { user_id }
+        })
         return wishes
     }
 
@@ -22,7 +24,10 @@ class WishlistService {
  
     async findByItemName(item_name, user_id) {
         const wish = await models.Wishlist.findAll({
-            where: { item_name, user_id }
+            where: { 
+                item_name: { [Op.like]: `%${item_name}%` }, 
+                user_id 
+            }
         })
         return wish
     }
@@ -30,10 +35,8 @@ class WishlistService {
     async findByFavorite(user_id) {
         const wish = await models.Wishlist.findAll({
             where: { 
-                [Op.and]: {
-                    [Op.is]: { favorite: true },
-                    user_id
-                }
+                favorite: true,
+                user_id
             }
         })
         return wish

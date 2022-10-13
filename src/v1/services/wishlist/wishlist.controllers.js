@@ -7,11 +7,8 @@ class WishlistController {
     async create(req, res, next) {
         const { body, user } = req
         try {
-            const wishExist = await service.findByItemName(body.item_name, user.id)
-            if(wishExist) throw boom.conflict('wish already exist')
-
             const newWish = await service.create({ ...body, user_id: user.id })
-            res.status(201).json(newWish.dataValues)
+            res.status(201).json(newWish)
         } catch(error) {
             next(error)
         }
@@ -32,7 +29,7 @@ class WishlistController {
             const wish = await service.findOne(params.id, user.id)
             if(!wish) throw boom.notFound('wish not found')
 
-            res.status(200).json(wish.dataValues)
+            res.status(200).json(wish)
         } catch(error) {
             next(error)
         }
@@ -44,7 +41,7 @@ class WishlistController {
             const wish = await service.findByItemName(body.item_name, user.id)
             if(!wish) throw boom.notFound('wish not found')
 
-            res.status(200).json(wish.dataValues)
+            res.status(200).json(wish)
         } catch(error) {
             next(error)
         }
@@ -55,7 +52,7 @@ class WishlistController {
             const wish = await service.findByFavorite(req.user.id)
             if(!wish) throw boom.notFound('wish not found')
 
-            res.status(200).json(wish.dataValues)
+            res.status(200).json(wish)
         } catch(error) {
             next(error)
         }
@@ -68,7 +65,7 @@ class WishlistController {
             if(!wishExist) throw boom.notFound('wish not found')
 
             const wish = await service.updateOne(params.id, req.body)
-            res.status(201).json(wish.dataValues)
+            res.status(201).json(wish)
         } catch(error) {
             next(error)
         }
