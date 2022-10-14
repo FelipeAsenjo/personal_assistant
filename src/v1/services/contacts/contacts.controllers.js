@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom')
 const ContactService = require('./contacts.services')
+const { searchByMulti } = require('../../../utils/finders.utils')
 
 const service = new ContactService()
 
@@ -7,7 +8,7 @@ class ContactController {
     async create(req, res, next) {
         const { body, user } = req
         try {
-            const contactExist = await searchByMulti(body.person, user.id)
+            const contactExist = await searchByMulti(service, body.person, user.id)
             if(contactExist) return res.status(200).json({
                 error: {
                     message: 'contact already exist',
@@ -49,7 +50,7 @@ class ContactController {
     async findContact(req, res, next) {
         const { body, user } = req
         try {
-            const contact = await searchByMulti(body.person, user.id)
+            const contact = await searchByMulti(service, body.person, user.id)
             if(!contact) throw boom.notFound('contact not found')
 
             res.status(200).json(contact)
@@ -85,36 +86,6 @@ class ContactController {
             next(error)
         }
     }
-}
-
-const searchByMulti = async (contact, user_id) => {
-    const { rut, email, alias } = contact
-    // const contactData = contact.rut || contact.email || contact.alias
-    const contactExist = async () => {
-        try {
-            if(rut) {
-                const contactByRut = await service.findByRut(rut, user_id)
-                if(contactByRut) return contactByRut
-                return false
-            } 
-            if(email) {
-                const contactByEmail = await service.findByEmail(email, user_id)
-                if(contactByEmail) return contactByEmail
-                return false
-            } 
-            if(alias) {
-                const contactByAlias = await service.findByAlias(alias, user_id)
-                if(contactByAlias) return contactByAlias
-                return false
-            } 
-
-            return false
-        } catch(error) {
-            throw new Error(error)
-        }
-    }
-
-    return contactExist()
 }
 
 module.exports = ContactController

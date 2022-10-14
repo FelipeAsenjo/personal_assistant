@@ -95,6 +95,4 @@ class AddressController {
     }
 }
 
-const comesFromContact = (baseUrl) => baseUrl.includes('contacts')
-
 module.exports = AddressController

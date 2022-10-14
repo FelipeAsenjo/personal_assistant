@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { models } = sequelize
 
@@ -35,7 +36,10 @@ class ContactService {
 
     async findByAlias(alias, user_id) {
         const contact = await models.Contact.findAll({
-            where: { alias, user_id },
+            where: { 
+                alias: { [Op.like]: `%${alias}%` }, 
+                user_id 
+            },
             include: 'person'
         })
         return contact
