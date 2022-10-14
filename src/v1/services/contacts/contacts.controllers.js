@@ -13,7 +13,7 @@ class ContactController {
                     message: 'contact already exist',
                     type: 409
                 },
-                ...contactExist
+                ...contactExist.dataValues
             })
 
             const newContact = await service.create({ ...body, user_id: user.id })

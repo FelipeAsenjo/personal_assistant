@@ -5,14 +5,15 @@ const service = new AddressService()
 
 class AddressController {
     async create(req, res, next) {
-        const { body, user, baseUrl, params } = req
-        try {
-            const addressExist = await service.findByContact(body.contact_id, user.id)
-            if(addressExist) throw boom.conflict('address already exist')
-            if(!body.contact_id) body.user_id = user.id
+        const { body, user, fromContact, params } = req
 
-            const newAddress = await service.create(body)
-            res.status(201).json(newAddress.dataValues)
+        const data = fromContact ? 
+            { ...body, contact_id: params.contact_id } :
+            { ...body, user_id: user.id } 
+
+        try {
+            const newAddress = await service.create(data)
+            res.status(201).json(newAddress)
         } catch(error) {
             next(error)
         }
@@ -21,7 +22,7 @@ class AddressController {
     async findAll(req, res, next) {
         try {
             const addresses = await service.findAll(req.user.id)
-            res.status(200).json(addresses.dataValues)
+            res.status(200).json(addresses)
         } catch(error) {
             next(error)
         }
@@ -33,7 +34,7 @@ class AddressController {
             const address = await service.findOne(params.id, user.id)
             if(!address) throw boom.notFound('address not found')
 
-            res.status(200).json(address.dataValues)
+            res.status(200).json(address)
         } catch(error) {
             next(error)
         }
@@ -44,19 +45,24 @@ class AddressController {
             const addresses = await service.findMyOwn(req.user.id)
             if(!addresses) throw boom.notFound('address not found')
 
-            res.status(200).json(addresses.dataValues)
+            res.status(200).json(addresses)
         } catch(error) {
             next(error)
         }
     }
 
     async findByContact(req, res, next) {
-        const { body, user } = req
+        const { body, user, fromContact, params } = req
+
+        const contactId = fromContact ?
+            params.contact_id :
+            body.contact_id
+
         try {
-            const addresses = await service.findByContact(body.contact_id, user.id)
+            const addresses = await service.findByContact(contactId, user.id)
             if(!addresses) throw boom.notFound('address not found')
 
-            res.status(200).json(addresses.dataValues)
+            res.status(200).json(addresses)
         } catch(error) {
             next(error)
         }
@@ -69,7 +75,7 @@ class AddressController {
             if(!addressExist) throw boom.notFound('address not found')
 
             const address = await service.updateOne(id, req.body)
-            res.status(201).json(address.dataValues)
+            res.status(201).json(address)
         } catch(error) {
             next(error)
         }
@@ -88,5 +94,7 @@ class AddressController {
         }
     }
 }
+
+const comesFromContact = (baseUrl) => baseUrl.includes('contacts')
 
 module.exports = AddressController

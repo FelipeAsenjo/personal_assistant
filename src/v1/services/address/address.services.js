@@ -1,17 +1,13 @@
+const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { Contact } = require('../../../libs/sequelize/models/contacts.model')
+const { User } = require('../../../libs/sequelize/models/users.model')
 const { models } = sequelize
 
 class AddressService {
     async create(data) {
-        const newAddress = await models.Address.create(data, {
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
-        })
-        return newAddress
+        const ownerAddress = await models.Address.create(data)
+        return ownerAddress
     }
 
     async findAll(user_id) {
@@ -41,7 +37,6 @@ class AddressService {
     async findMyOwn(user_id) {
         const addresses = await models.Address.findAll({
             where: { user_id },
-            include: 'person'
         })
         return addresses
     }

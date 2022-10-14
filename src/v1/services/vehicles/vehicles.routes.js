@@ -7,7 +7,7 @@ const {
     getVehicleSchema
 } = require('./vehicles.validations')
 
-const router = express.Router()
+const router = express.Router({mergeParams: true})
 const controller = new VehicleController()
 
 router.get('/', 

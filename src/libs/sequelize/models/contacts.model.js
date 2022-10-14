@@ -42,23 +42,13 @@ class Contact extends Model {
     this.belongsTo(models.Person, { as: 'person', foreignKey: 'person_id' })
     this.belongsTo(models.User, { as: 'owner', foreignKey: 'user_id' })
 
+    this.hasMany(models.Vehicle, { as: 'vehicle', foreignKey: 'contact_id' })
+    this.hasMany(models.Address, { as: 'address', foreignKey: 'contact_id' })
     this.hasMany(models.Phone, { as: 'phones', foreignKey: 'contact_id' })
     this.hasMany(models.SocialMedia, { as: 'socialMedia', foreignKey: 'contact_id' })
     this.hasMany(models.BankAccount, { as: 'bankAccount', foreignKey: 'contact_id' })
     this.hasMany(models.Email, { as: 'emails', foreignKey: 'contact_id' })
 
-    this.belongsToMany(models.Vehicle, { 
-      through: 'contact_vehicle_junction',
-      foreignKey: 'contact_id',
-      otherKey: 'vehicle_id',
-      as: 'vehicle'
-    })
-    this.belongsToMany(models.Address, { 
-      through: 'contact_address_junction',
-      foreignKey: 'contact_id',
-      otherKey: 'address_id',
-      as: 'address'
-    })
   }
 
   static config(sequelize) {

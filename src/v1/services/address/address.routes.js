@@ -7,7 +7,7 @@ const {
     getAddressSchema
 } = require('./address.validations')
 
-const router = express.Router()
+const router = express.Router({mergeParams: true})
 const controller = new AddressController()
 
 router.get('/', 
@@ -33,6 +33,14 @@ router.patch('/:id',
 router.delete('/:id',
     validatorHandler(getAddressSchema, 'params'),
     controller.deleteOne
+)
+
+router.post('/findMyOwn', 
+    controller.findMyOwn
+)
+
+router.post('/findByContact', 
+    controller.findByContact
 )
 
 module.exports = router

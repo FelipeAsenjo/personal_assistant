@@ -7,7 +7,7 @@ const {
     getEmailSchema
 } = require('./emails.validations')
 
-const router = express.Router()
+const router = express.Router({mergeParams: true})
 const controller = new EmailController()
 
 router.get('/', 

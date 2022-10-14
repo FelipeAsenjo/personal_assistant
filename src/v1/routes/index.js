@@ -16,10 +16,12 @@ const users = require('../services/users/users.routes')
 const vehicles = require('../services/vehicles/vehicles.routes')
 const wishlist = require('../services/wishlist/wishlist.routes')
 const { isAuthenticated, hasRole } = require('../../middlewares/auth.handler')
+const { comesFromContact } = require('../../middlewares/routesOrigin.handler')
 
 const router = express.Router()
 
 const contactsPath = '/contacts/:contact_id'
+const projectsPath = '/projects/:project_id'
 
 router.use('/auth', auth)
 router.use('/users', 
@@ -28,25 +30,25 @@ router.use('/users',
     users
 )
 router.use(`/address`, isAuthenticated, address)
-router.use(`${contactsPath}/address`, isAuthenticated, address)
+router.use(`${contactsPath}/address`, isAuthenticated, comesFromContact, address)
 router.use(`/bankAccounts`, isAuthenticated, bankAccounts)
-router.use(`${contactsPath}/bankAccounts`, isAuthenticated, bankAccounts)
+router.use(`${contactsPath}/bankAccounts`, isAuthenticated, comesFromContact, bankAccounts)
 router.use(`/contacts`, isAuthenticated, contacts)
 router.use(`/emails`, isAuthenticated, emails)
-router.use(`${contactsPath}/emails`, isAuthenticated, emails)
+router.use(`${contactsPath}/emails`, isAuthenticated, comesFromContact, emails)
 router.use(`/inventory`, isAuthenticated, inventory)
 // router.use(`/people`, isAuthenticated, people)
 router.use(`/phones`, isAuthenticated, phones)
-router.use(`${contactsPath}/phones`, isAuthenticated, phones)
+router.use(`${contactsPath}/phones`, isAuthenticated, comesFromContact, phones)
 router.use(`/projects`, isAuthenticated, projects)
-router.use(`/projects/:project_id/resources`, isAuthenticated, projectResources)
+router.use(`${projectsPath}/resources`, isAuthenticated, projectResources)
 router.use(`/socialMedia`, isAuthenticated, socialMedia)
-router.use(`${contactsPath}/socialMedia`, isAuthenticated, socialMedia)
+router.use(`${contactsPath}/socialMedia`, isAuthenticated, comesFromContact, socialMedia)
 router.use(`/tasks`, isAuthenticated, tasks)
 router.use(`/transfers`, isAuthenticated, transfers)
-router.use(`${contactsPath}/transfers`, isAuthenticated, transfers)
+router.use(`${contactsPath}/transfers`, isAuthenticated, comesFromContact, transfers)
 router.use(`/vehicles`, isAuthenticated, vehicles)
-router.use(`${contactsPath}/vehicles`, isAuthenticated, vehicles)
+router.use(`${contactsPath}/vehicles`, isAuthenticated, comesFromContact, vehicles)
 router.use(`/wishlist`, isAuthenticated, wishlist)
 
 

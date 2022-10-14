@@ -7,7 +7,7 @@ const {
     getTransferSchema
 } = require('./transfers.validations')
 
-const router = express.Router()
+const router = express.Router({mergeParams: true})
 const controller = new TransferController()
 
 router.get('/', 

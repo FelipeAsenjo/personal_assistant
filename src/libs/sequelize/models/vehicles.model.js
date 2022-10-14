@@ -29,18 +29,8 @@ const VehicleSchema = {
 
 class Vehicle extends Model {
   static associate(models) {
-    this.belongsToMany(models.User, {
-      through: 'user_vehicle_junction',
-      foreignKey: 'vehicle_id',
-      otherKey: 'user_id',
-      as: 'user'
-    })
-    this.belongsToMany(models.Contact, {
-      through: 'contact_vehicle_junction',
-      foreignKey: 'vehicle_id',
-      otherKey: 'contact_id',
-      as: 'contact'
-    })
+    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' })
+    this.belongsTo(models.Contact, { foreignKey: 'contact_id', as: 'contact' })
   }
 
   static config(sequelize) {
