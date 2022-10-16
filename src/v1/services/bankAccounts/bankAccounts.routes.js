@@ -35,4 +35,6 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findMyOwn', controller.findMyOwn)
+
 module.exports = router

@@ -1,18 +1,17 @@
+const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { Contact } = require('../../../libs/sequelize/models/contacts.model')
 const { Person } = require('../../../libs/sequelize/models/people.model')
 const { User } = require('../../../libs/sequelize/models/users.model')
 const { models } = sequelize
 
+const userAttributes = ['id', 'username']
+const contactAttributes = ['alias']
+const personAttributes = ['id', 'name', 'last_name', 'rut']
+
 class BankAccountService {
     async create(data) {
-        const newBankAccount = await models.BankAccount.create(data, {
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
-        })
+        const newBankAccount = await models.BankAccount.create(data)
         return newBankAccount
     }
 
@@ -22,7 +21,12 @@ class BankAccountService {
             include: {
                 model: Contact,
                 as: 'contact',
-                include: 'person'
+                attributes: contactAttributes,
+                include: {
+                    model: Person,
+                    as: 'person',
+                    attributes: personAttributes
+                }
             }
         })
         return bankAccounts
@@ -34,7 +38,11 @@ class BankAccountService {
             include: {
                 model: Contact,
                 as: 'contact',
-                include: 'person'
+                include: {
+                    model: Person,
+                    as: 'person',
+                    attributes: personAttributes
+                }
             }
         })
         return bankAccount
@@ -46,7 +54,12 @@ class BankAccountService {
             include: {
                 model: User,
                 as: 'user',
-                include: 'person'
+                attributes: userAttributes,
+                include: {
+                    model: Person,
+                    as: 'person',
+                    attributes: personAttributes
+                }
             }
         })
         return bankAccount
@@ -54,11 +67,22 @@ class BankAccountService {
 
     async findByAccountNumber(account_number, user_id) {
         const bankAccount = await models.BankAccount.findOne({
-            where: { '$contact.user_id$': user_id, account_number },
+            where: { 
+                [Op.or]: {
+                    '$contact.user_id$': user_id, 
+                    id: user_id
+                },
+                account_number 
+            },
             include: {
                 model: Contact,
                 as: 'contact',
-                include: 'person'
+                attributes: contactAttributes,
+                include: {
+                    model: Person,
+                    as: 'person',
+                    attributes: personAttributes
+                }
             }
         })
         return bankAccount
@@ -70,9 +94,11 @@ class BankAccountService {
             include: {
                 model: Contact,
                 as: 'contact',
+                attributes: contactAttributes,
                 include: {
                     model: Person,
                     as: 'person',
+                    attributes: personAttributes,
                     where: { rut }
                 }
             }
@@ -81,15 +107,20 @@ class BankAccountService {
     }
 
     async findByContact(contact_id, user_id) {
-        const phone = await models.Phone.findAll({
+        const bankAccount = await models.BankAccount.findAll({
             where: { '$contact.user_id$': user_id, contact_id },
             include: {
                 model: Contact,
                 as: 'contact',
-                include: 'person'
+                attributes: contactAttributes,
+                include: {
+                    model: Person,
+                    as: 'person',
+                    attributes: personAttributes
+                }
             }
         })
-        return phone
+        return bankAccount
     }
 
     async updateOne(id, changes) {

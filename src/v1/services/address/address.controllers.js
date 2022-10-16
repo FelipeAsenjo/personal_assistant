@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom')
 const AddressService = require('./address.services')
+const { searchByMulti } = require('../../../utils/finders.utils')
 
 const service = new AddressService()
 
@@ -59,6 +60,7 @@ class AddressController {
             body.contact_id
 
         try {
+            // const addresses = await searchByMulti(service, body.person, user.id)
             const addresses = await service.findByContact(contactId, user.id)
             if(!addresses) throw boom.notFound('address not found')
 

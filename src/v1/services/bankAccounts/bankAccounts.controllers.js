@@ -5,13 +5,17 @@ const service = new BankAccountService()
 
 class BankAccountController {
     async create(req, res, next) {
-        const { body, user } = req
-        try {
-            const accountExist = await this.findByAccountNumber(body.account_number, user.id)
-            if(accountExist) throw boom.conflict('account already exist')
-            if(!body.contact_id) body.user_id = user.id
+        const { body, user, fromContact, params } = req
 
-            const newAccount = await service.create(body)
+        const data = fromContact ? 
+            { ...body, contact_id: params.contact_id } :
+            { ...body, user_id: user.id } 
+
+        try {
+            const accountExist = await findByAccountNumber(body.account_number, user.id)
+            if(accountExist) throw boom.conflict('account already exist')
+
+            const newAccount = await service.create(data)
             res.status(201).json(newAccount)
         } catch(error) {
             next(error)
@@ -33,7 +37,7 @@ class BankAccountController {
             const account = await service.findOne(params.id, user.id)
             if(!account) throw boom.notFound('account not found')
 
-            res.status(200).json(account.dataValues)
+            res.status(200).json(account)
         } catch(error) {
             next(error)
         }
@@ -44,36 +48,25 @@ class BankAccountController {
             const account = await service.findMyOwn(req.user.id)
             if(!account) throw boom.notFound('account not found')
 
-            res.status(200).json(account.dataValues)
+            res.status(200).json(account)
         } catch(error) {
             next(error)
         }
     }
 
-    async findByAccountNumber(req, res, next) {
-        const { body, user } = req
-        try {
-            const account = await service.findByAccountNumber(body.account_number, user.id)
-            if(!account) throw boom.notFound('account not found')
+    // async findByRut(req, res, next) {
+    //     const { body, user } = req
+    //     try {
+    //         const account = await service.findByRut(body.rut, user.id)
+    //         if(!account) throw boom.notFound('account not found')
 
-            res.status(200).json(account.dataValues)
-        } catch(error) {
-            next(error)
-        }
-    }
+    //         res.status(200).json(account.dataValues)
+    //     } catch(error) {
+    //         next(error)
+    //     }
+    // }
 
-    async findByRut(req, res, next) {
-        const { body, user } = req
-        try {
-            const account = await service.findByRut(body.rut, user.id)
-            if(!account) throw boom.notFound('account not found')
-
-            res.status(200).json(account.dataValues)
-        } catch(error) {
-            next(error)
-        }
-    }
-
+    // improve with multisearch
     async findByContact(req, res, next) {
         const { body, user } = req
         try {
@@ -92,8 +85,8 @@ class BankAccountController {
             const accountExist = await service.findOne(params.id, user.id)
             if(!accountExist) throw boom.notFound('account not found')
 
-            const account = await service.updateOne(id, body)
-            res.status(201).json(account.dataValues)
+            const account = await service.updateOne(params.id, body)
+            res.status(201).json(account)
         } catch(error) {
             next(error)
         }
@@ -102,9 +95,7 @@ class BankAccountController {
     async deleteOne(req, res, next) {
         const { id } = req.params
         try {
-            const accountExist = id ?
-                await service.findOne(id, req.user.id) :
-                await this.findContact(req.body)
+            const accountExist = await service.findOne(id, req.user.id)
             if(!accountExist) throw boom.notFound('account not found')
 
             await service.deleteOne(id)
@@ -112,6 +103,17 @@ class BankAccountController {
         } catch(error) {
             next(error)
         }
+    }
+}
+
+const findByAccountNumber = async (account_number, user_id) => {
+    try {
+        const account = await service.findByAccountNumber(account_number, user_id)
+        if(account) return account
+
+        return false
+    } catch(error) {
+        throw new Error(error)
     }
 }
 
