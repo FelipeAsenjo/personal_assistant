@@ -1,15 +1,38 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { Contact } = require('../../../libs/sequelize/models/contacts.model')
+const { Person } = require('../../../libs/sequelize/models/people.model')
+const { User } = require('../../../libs/sequelize/models/users.model')
 const { models } = sequelize
+
+const userAttributes = ['id', 'username']
+const contactAttributes = ['alias']
+const personAttributes = ['id', 'name', 'last_name', 'rut']
+
+const includePerson = {
+    model: Person,
+    as: 'person',
+    attributes: personAttributes
+}
+
+const includeContact = (person) => ({
+    model: Contact,
+    as: 'contact',
+    attributes: contactAttributes,
+    include: person
+})
+
+const includeUser = (person) => ({
+    model: User,
+    as: 'user',
+    attributes: userAttributes,
+    include: person
+})
+
 
 class PhoneService {
     async create(data) {
         const newPhone = await models.Phone.create(data, {
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            include: includeContact(includePerson)
         })
         return newPhone
     }
@@ -17,11 +40,7 @@ class PhoneService {
     async findAll(user_id) {
         const phones = await models.Phone.findAll({
             where: { '$contact.user_id$': user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            include: includeContact(includePerson)
         })
         return phones
     }
@@ -29,11 +48,7 @@ class PhoneService {
     async findOne(id, user_id) {
         const phone = await models.Phone.findByPk(id, {
             where: { '$contact.user_id$': user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            include: includeContact(includePerson)
         })
         return phone
     }
@@ -41,31 +56,23 @@ class PhoneService {
     async findMyOwn(user_id) {
         const phones = await models.Phone.findAll({
             where: { user_id },
-            include: 'person'
+            include: includeUser(includePerson)
         })
         return phones
     }
 
     async findByContact(contact_id, user_id) {
         const phone = await models.Phone.findAll({
-            where: { contact_id, user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            where: { '$contact.user_id$': user_id, contact_id },
+            include: includeContact(includePerson)
         })
         return phone
     }
 
     async findByNumber(number, user_id) {
         const phone = await models.Phone.findOne({
-            where: { number, user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            where: { '$contact.user_id$': user_id, number },
+            include: includeContact(includePerson)
         })
         return phone
     }   

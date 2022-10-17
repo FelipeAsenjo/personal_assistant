@@ -1,8 +1,8 @@
 const Joi = require('joi')
 
 const id = Joi.string().guid()
-const country_code = Joi.string().max(10)
-const number = Joi.number()
+const country_code = Joi.string().max(5)
+const number = Joi.number().min(6)
 const tag = Joi.string().max(25)
 
 const createPhonesSchema = Joi.object({                                                       
