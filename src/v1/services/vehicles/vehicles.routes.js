@@ -35,4 +35,13 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findMyOwn', controller.findMyOwn)
+
+router.post('/findByPlateNumber', 
+    validatorHandler(updateVehicleSchema, 'body'),
+    controller.findByPlateNumber
+)
+
+router.post('/findByContact', controller.findByContact)
+
 module.exports = router

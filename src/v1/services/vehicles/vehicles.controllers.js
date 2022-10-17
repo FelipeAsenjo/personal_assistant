@@ -5,14 +5,15 @@ const service = new VehicleService()
 
 class VehicleController {
     async create(req, res, next) {
-        const { body, user } = req
-        try {
-            const vehicleExist = await service.findByPlateNumber(body.plate_number, user.id)
-            if(vehicleExist) throw boom.conflict('vehicle already exist')
-            if(!body.contact_id) body.user_id = user.id
+        const { body, user, params, fromContact } = req
 
-            const newVehicle = await service.create(body)
-            res.status(201).json(newVehicle.dataValues)
+        const data = fromContact ? 
+            { ...body, contact_id: params.contact_id } :
+            { ...body, user_id: user.id } 
+
+        try {
+            const newVehicle = await service.create(data)
+            res.status(201).json(newVehicle)
         } catch(error) {
             next(error)
         }
@@ -28,12 +29,12 @@ class VehicleController {
     }
 
     async findOne(req, res, next) {
-        const { params } = req
+        const { params, user } = req
         try {
-            const vehicle = await service.findOne(params.id)
+            const vehicle = await service.findOne(params.id, user.id)
             if(!vehicle) throw boom.notFound('vehicle not found')
 
-            res.status(200).json(vehicle.dataValues)
+            res.status(200).json(vehicle)
         } catch(error) {
             next(error)
         }
@@ -44,7 +45,7 @@ class VehicleController {
             const vehicle = await service.findMyOwn(req.user.id)
             if(!vehicle) throw boom.notFound('vehicle not found')
 
-            res.status(200).json(vehicle.dataValues)
+            res.status(200).json(vehicle)
         } catch(error) {
             next(error)
         }
@@ -56,7 +57,24 @@ class VehicleController {
             const vehicle = await service.findByPlateNumber(body.plate_number, user.id)
             if(!vehicle) throw boom.notFound('vehicle not found')
 
-            res.status(200).json(vehicle.dataValues)
+            res.status(200).json(vehicle)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async findByContact(req, res, next) {
+        const { body, user, fromContact, params } = req
+
+        const contactId = fromContact ?
+            params.contact_id :
+            body.contact_id
+
+        try {
+            const vehicle = await service.findByContact(contactId, user.id)
+            if(!vehicle) throw boom.notFound('vehicle not found')
+
+            res.status(200).json(vehicle)
         } catch(error) {
             next(error)
         }
@@ -69,7 +87,7 @@ class VehicleController {
             if(!vehicleExist) throw boom.notFound('vehicle not found')
 
             const vehicle = await service.updateOne(params.id, body)
-            res.status(201).json(vehicle.dataValues)
+            res.status(201).json(vehicle)
         } catch(error) {
             next(error)
         }

@@ -63,7 +63,6 @@ class SocialMediaService {
     }
 
     async findByUsername(username, user_id) {
-        // console.log(username)
         const socialMedia = await models.SocialMedia.findAll({
             where: { 
                 '$contact.user_id$': user_id, 

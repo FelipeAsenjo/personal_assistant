@@ -56,7 +56,6 @@ class SocialMediaController {
 
     async findByUsername(req, res, next) {
         const { body, user } = req
-        console.log(body.username)
         try {
             const socialMedia = await service.findByUsername(body.username, user.id)
             if(!socialMedia) throw boom.notFound('social media not found')
