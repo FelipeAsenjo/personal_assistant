@@ -1,15 +1,39 @@
+const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { Contact } = require('../../../libs/sequelize/models/contacts.model')
+const { Person } = require('../../../libs/sequelize/models/people.model')
+const { User } = require('../../../libs/sequelize/models/users.model')
 const { models } = sequelize
+
+const userAttributes = ['id', 'username']
+const contactAttributes = ['alias']
+const personAttributes = ['id', 'name', 'last_name', 'rut']
+
+const includePerson = {
+    model: Person,
+    as: 'person',
+    attributes: personAttributes
+}
+
+const includeContact = (person) => ({
+    model: Contact,
+    as: 'contact',
+    attributes: contactAttributes,
+    include: person
+})
+
+const includeUser = (person) => ({
+    model: User,
+    as: 'user',
+    attributes: userAttributes,
+    include: person
+})
+
 
 class SocialMediaService {
     async create(data) {
         const newSocialMedia = await models.SocialMedia.create(data, {
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            include: includeContact(includePerson)
         })
         return newSocialMedia
     }
@@ -17,11 +41,7 @@ class SocialMediaService {
     async findAll(user_id) {
         const socialMedia = await models.SocialMedia.findAll({
             where: { '$contact.user_id$': user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            include: includeContact(includePerson)
         })
         return socialMedia
     }
@@ -29,35 +49,35 @@ class SocialMediaService {
     async findOne(id, user_id) {
         const socialMedia = await models.SocialMedia.findByPk(id, {
             where: { '$contact.user_id$': user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }           
+            include: includeContact(includePerson)
         })
         return socialMedia
     }
  
+    async findMyOwn(user_id) {
+        const socialMedia = await models.SocialMedia.findAll({
+            where: { user_id },
+            include: includeUser(includePerson)
+        })
+        return socialMedia
+    }
+
     async findByUsername(username, user_id) {
-        const socialMedia = await models.SocialMedia.findOne({
-            where: { '$contact.user_id$': user_id, username },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+        // console.log(username)
+        const socialMedia = await models.SocialMedia.findAll({
+            where: { 
+                '$contact.user_id$': user_id, 
+                username: { [Op.like]: `%${username}%` } 
+            },
+            include: includeContact(includePerson)
         })
         return socialMedia
     }
 
     async findByContact(contact_id, user_id) {
-        const socialMedia = await models.SocialMedia.findOne({
+        const socialMedia = await models.SocialMedia.findAll({
             where: { '$contact.user_id$': user_id, contact_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            include: includeContact(includePerson)
         })
         return socialMedia
     }
