@@ -66,14 +66,32 @@ class BankAccountController {
     //     }
     // }
 
-    // improve with multisearch
-    async findByContact(req, res, next) {
+    async findByAccountNumber(req, res, next) {
         const { body, user } = req
+
         try {
-            const account = await service.findByContact(body.contact_id, user.id)
+            const account = await service.findByAccountNumber(body.account_number, user.id)
             if(!account) throw boom.notFound('account not found')
 
-            res.status(200).json(account.dataValues)
+            res.status(200).json(account)
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    // improve with multisearch
+    async findByContact(req, res, next) {
+        const { body, user, fromContact, params } = req
+
+        const contactId = fromContact ?
+            params.contact_id :
+            body.contact_id
+
+        try {
+            const account = await service.findByContact(contactId, user.id)
+            if(!account) throw boom.notFound('account not found')
+
+            res.status(200).json(account)
         } catch(error) {
             next(error)
         }

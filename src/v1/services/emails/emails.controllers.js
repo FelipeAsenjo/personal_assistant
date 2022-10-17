@@ -5,14 +5,18 @@ const service = new EmailService()
 
 class EmailController {
     async create(req, res, next) {
-        const { body, user } = req
+        const { body, user, params, fromContact } = req
+
+        const data = fromContact ? 
+            { ...body, contact_id: params.contact_id } :
+            { ...body, user_id: user.id } 
+
         try {
             const emailExist = await service.findByAddress(body.address, user.id)
             if(emailExist) throw boom.conflict('email already exist')
-            if(!body.contact_id) body.user_id = user.id
 
-            const newEmail = await service.create(body)
-            res.status(201).json(newEmail.dataValues)
+            const newEmail = await service.create(data)
+            res.status(201).json(newEmail)
         } catch(error) {
             next(error)
         }
@@ -33,7 +37,7 @@ class EmailController {
             const email = await service.findOne(params.id, user.id)
             if(!email) throw boom.notFound('email not found')
 
-            res.status(200).json(email.dataValues)
+            res.status(200).json(email)
         } catch(error) {
             next(error)
         }
@@ -44,7 +48,7 @@ class EmailController {
             const email = await service.findMyOwn(req.user.id)
             if(!email) throw boom.notFound('email not found')
 
-            res.status(200).json(email.dataValues)
+            res.status(200).json(email)
         } catch(error) {
             next(error)
         }
@@ -56,19 +60,24 @@ class EmailController {
             const email = await service.findByAddress(body.address, user.id)
             if(!email) throw boom.notFound('email not found')
 
-            res.status(200).json(email.dataValues)
+            res.status(200).json(email)
         } catch(error) {
             next(error)
         }
     }
 
     async findByContact(req, res, next) {
-        const { user, body } = req
+        const { user, body, params, fromContact } = req
+
+        const contactId = fromContact ?
+            params.contact_id :
+            body.contact_id
+
         try {
-            const email = await service.findByContact(body.contact_id, user.id)
+            const email = await service.findByContact(contactId, user.id)
             if(!email) throw boom.notFound('email not found')
 
-            res.status(200).json(email.dataValues)
+            res.status(200).json(email)
         } catch(error) {
             next(error)
         }
@@ -81,7 +90,7 @@ class EmailController {
             if(!emailExist) throw boom.notFound('email not found')
 
             const email = await service.updateOne(id, req.body)
-            res.status(201).json(email.dataValues)
+            res.status(201).json(email)
         } catch(error) {
             next(error)
         }

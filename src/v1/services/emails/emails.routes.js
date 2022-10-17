@@ -35,4 +35,13 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findMyOwn', controller.findMyOwn)
+
+router.post('/findByContact', 
+    validatorHandler(updateEmailSchema, 'body'),
+    controller.findByContact
+)
+
+router.post('/findByAddress', controller.findByAddress)
+
 module.exports = router

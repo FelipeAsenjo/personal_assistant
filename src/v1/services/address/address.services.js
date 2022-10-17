@@ -9,6 +9,27 @@ const userAttributes = ['id', 'username']
 const contactAttributes = ['alias']
 const personAttributes = ['id', 'name', 'last_name', 'rut']
 
+const includePerson = {
+    model: Person,
+    as: 'person',
+    attributes: personAttributes
+}
+
+const includeContact = (person) => ({
+    model: Contact,
+    as: 'contact',
+    attributes: contactAttributes,
+    include: person
+})
+
+const includeUser = (person) => ({
+    model: User,
+    as: 'user',
+    attributes: userAttributes,
+    include: person
+})
+
+
 class AddressService {
     async create(data) {
         const ownerAddress = await models.Address.create(data)
@@ -18,16 +39,7 @@ class AddressService {
     async findAll(user_id) {
         const addresses = await models.Address.findAll({
             where: { '$contact.user_id$': user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                attributes: contactAttributes,
-                include: {
-                    model: Person,
-                    as: 'person',
-                    attributes: personAttributes
-                }
-            }
+            include: includeContact(includePerson)
         })
         return addresses
     }
@@ -35,16 +47,7 @@ class AddressService {
     async findOne(id, user_id) {
         const address = await models.Address.findByPk(id, {
             where: { '$contact.user_id$': user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                attributes: contactAttributes,
-                include: {
-                    model: Person,
-                    as: 'person',
-                    attributes: personAttributes
-                }
-            }
+            include: includeContact(includePerson)
         })
         return address
     }
@@ -52,16 +55,7 @@ class AddressService {
     async findMyOwn(user_id) {
         const addresses = await models.Address.findAll({
             where: { user_id },
-            include: {
-                model: User,
-                as: 'user',
-                attributes: userAttributes,
-                include: {
-                    model: Person,
-                    as: 'person',
-                    attributes: personAttributes
-                }
-            }
+            include: includeUser(includePerson)
         })
         return addresses
     }
@@ -69,16 +63,7 @@ class AddressService {
     async findByContact(contact_id, user_id) {
         const address = await models.Address.findAll({
             where: { '$contact.user_id$': user_id, contact_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                attributes: contactAttributes,
-                include: {
-                    model: Person,
-                    as: 'person',
-                    attributes: personAttributes
-                }
-            }
+            include: includeContact(includePerson)
         })
         return address
     }
@@ -86,16 +71,7 @@ class AddressService {
     async findByRut(rut, user_id) {
         const address = await models.Address.findOne({
             where: { '$person.rut$': rut, user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                attributes: contactAttributes,
-                include: {
-                    model: Person,
-                    as: 'person',
-                    attributes: personAttributes
-                }
-            }
+            include: includeContact(includePerson)
         })
         return address
     }
@@ -108,16 +84,7 @@ class AddressService {
                     '$contact.user_id$': user_id 
                 }
             },
-            include: {
-                model: Contact,
-                as: 'contact',
-                attributes: contactAttributes,
-                include: {
-                    model: Person,
-                    as: 'person',
-                    attributes: personAttributes
-                }
-            }
+            include: includeContact(includePerson)
         })
         return address
     }      
@@ -125,16 +92,7 @@ class AddressService {
     async findByEmail(email, user_id) {
         const address = await models.Address.findOne({
             where: { '$emails.address$': email, user_id },
-            include: {
-                model: Contact,
-                as: 'contact',
-                attributes: contactAttributes,
-                include: {
-                    model: Person,
-                    as: 'person',
-                    attributes: personAttributes
-                }
-            }
+            include: includeContact(includePerson)
         })
         return address
     }
