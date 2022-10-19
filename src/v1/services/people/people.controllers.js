@@ -8,10 +8,7 @@ const service = new PeopleService()
 class PeopleController {
     async create(req, res, next) {
         try {
-            const personExist = await service.findByRut(req.body.rut)
-            if(personExist) throw boom.conflict('person already exist')
-
-            const newPerson = await service.create(body)
+            const newPerson = await service.create(req.body)
             res.status(201).json(newPerson)
         } catch(error) {
             next(error)
@@ -32,7 +29,7 @@ class PeopleController {
             const person = await service.findOne(req.params.id)
             if(!person) throw boom.notFound('person not found')
 
-            res.status(200).json(person.dataValues)
+            res.status(200).json(person)
         } catch(error) {
             next(error)
         }
@@ -43,12 +40,11 @@ class PeopleController {
             const person = await searchByMulti(req.body)
             if(!person) throw boom.notFound('person not found')
 
-            res.status(200).json(person.dataValues)
+            res.status(200).json(person)
         } catch(error) {
             next(error)
         }
     }
-
 
     async updateOne(req, res, next) {
         const { id } = req.params
@@ -57,7 +53,7 @@ class PeopleController {
             if(!personExist) throw boom.notFound('person not found')
 
             const person = await service.updateOne(id, req.body)
-            res.status(201).json(person.dataValues)
+            res.status(201).json(person)
         } catch(error) {
             next(error)
         }

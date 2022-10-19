@@ -9,18 +9,18 @@ const rut = Joi.string().min(9).max(10)
 
 const createPersonSchema = Joi.object({                                                       
   name: name.required(),
-  last_name: last_name,
-  alias: alias,
-  birthday: birthday,
-  rut: rut
+  last_name,
+  alias,
+  birthday,
+  rut,
 })
 
 const updatePersonSchema = Joi.object({                                                       
-  name: name,
-  last_name: last_name,
-  alias: alias,
-  birthday: birthday,
-  rut: rut,
+  name,
+  last_name,
+  alias,
+  birthday,
+  rut,
 })
 
 const getPersonSchema = Joi.object({
