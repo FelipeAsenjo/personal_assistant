@@ -1,62 +1,74 @@
 const { sequelize } = require('../../../libs/sequelize/connection')
-const { Contact } = require('../../../libs/sequelize/models/contacts.model')
+const { BankAccount } = require('../../../libs/sequelize/models/bankAccount.model')
 const { models } = sequelize
 
+const accountAttributes = ['bank', 'account_type', 'account_number']
+
 class TransferService {
-    async create(data) {
+    async create(user_account_id, user_id, data) {
         const newTransfer = await models.Transfer.create(data, {
-            include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
-            }
+            where: { '$user_account.user_id$': user_id, user_account_id },
+            include: 'user_account'
         })
         return newTransfer
     }
 
-    async findAll(user_id) {
+    async findAll(user_id, user_account_id) {
         const transfers = await models.Transfer.findAll({
-            where: { '$from_account.user_id$': user_id },
+            where: { '$user_account.user_id$': user_id, user_account_id },
+            include: {
+                model: BankAccount,
+                as: 'user_account',
+                attributes: accountAttributes
+            }
         })
         return transfers
     }
 
     async findOne(id, user_id) {
         const transfer = await models.Transfer.findByPk(id, {
-            where: { '$from_account.user_id$': user_id },
-        })
-        return transfer
-    }
- 
-    async findByAccountNumber(account_number, user_id) {
-        const transfer = await models.Transfer.findAll({
-            where: { '$from_account.user_id$': user_id, account_number },
-        })
-        return transfer
-    }
-
-    async findByContact(contact_id, user_id) {
-        const transfer = await models.Transfer.findAll({
-            where: { contact_id, user_id },
+            where: { '$user_account.user_id$': user_id },
             include: {
-                model: Contact,
-                as: 'contact',
-                include: 'person'
+                model: BankAccount,
+                as: 'user_account',
+                attributes: accountAttributes
             }
         })
         return transfer
     }
 
+    // async findByContact(contact_id, user_id) {
+    //     const transfer = await models.Transfer.findAll({
+    //         where: { contact_id, user_id },
+    //         include: {
+    //             model: Contact,
+    //             as: 'contact',
+    //             include: 'person'
+    //         }
+    //     })
+    //     return transfer
+    // }
+
     async findByStandBy(standby, user_id) {
         const transfer = await models.Transfer.findAll({
-            where: { '$from_account.user_id$': user_id, standby },
+            where: { '$user_account.user_id$': user_id, standby },
+            include: {
+                model: BankAccount,
+                as: 'user_account',
+                attributes: accountAttributes
+            }
         })
         return transfer
     }
 
     async findByIncome(is_income, user_id) {
         const transfer = await models.Transfer.findAll({
-            where: { '$from_account.user_id$': user_id, is_income },
+            where: { '$user_account.user_id$': user_id, is_income },
+            include: {
+                model: BankAccount,
+                as: 'user_account',
+                attributes: accountAttributes
+            }
         })
         return transfer
     }

@@ -22,6 +22,7 @@ const router = express.Router()
 
 const contactsPath = '/contacts/:contact_id'
 const projectsPath = '/projects/:project_id'
+const bankAccountsPath = '/bankAccounts/:user_account_id'
 
 router.use('/auth', auth)
 router.use('/users', 
@@ -45,8 +46,7 @@ router.use(`${projectsPath}/resources`, isAuthenticated, projectResources)
 router.use(`/socialMedia`, isAuthenticated, socialMedia)
 router.use(`${contactsPath}/socialMedia`, isAuthenticated, comesFromContact, socialMedia)
 router.use(`/tasks`, isAuthenticated, tasks)
-router.use(`/transfers`, isAuthenticated, transfers)
-router.use(`${contactsPath}/transfers`, isAuthenticated, comesFromContact, transfers)
+router.use(`${bankAccountsPath}/transfers`, isAuthenticated, transfers)
 router.use(`/vehicles`, isAuthenticated, vehicles)
 router.use(`${contactsPath}/vehicles`, isAuthenticated, comesFromContact, vehicles)
 router.use(`/wishlist`, isAuthenticated, wishlist)

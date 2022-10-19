@@ -35,4 +35,8 @@ router.delete('/:id',
     controller.deleteOne
 )
 
+router.post('/findByIncome', controller.findByIncome)
+
+router.post('/findByStandBy', controller.findByStandBy)
+
 module.exports = router

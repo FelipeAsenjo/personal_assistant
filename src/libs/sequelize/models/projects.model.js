@@ -19,7 +19,7 @@ const ProjectSchema = {
     type: DataTypes.STRING(100),
   },
   description: DataTypes.STRING,
-  thoughts: DataTypes.STRING,
+  conclusions: DataTypes.STRING,
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE

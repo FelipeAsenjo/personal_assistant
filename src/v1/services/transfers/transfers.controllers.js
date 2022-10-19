@@ -5,18 +5,26 @@ const service = new TransferService()
 
 class TransferController {
     async create(req, res, next) {
-        const { body } = req
+        const { body, user } = req
+        const { user_account_id } = req.params
+
         try {
-            const newTransfer = await service.create(body)
-            res.status(201).json(newTransfer.dataValues)
+            const newTransfer = await service.create(
+                user_account_id,
+                user.id,
+                { ...body, user_account_id }
+            )
+            res.status(201).json(newTransfer)
         } catch(error) {
             next(error)
         }
     }
 
     async findAll(req, res, next) {
+        const { user_account_id } = req.params
+
         try {
-            const transfers = await service.findAll(req.user.id)
+            const transfers = await service.findAll(req.user.id, user_account_id)
             res.status(200).json(transfers)
         } catch(error) {
             next(error)
@@ -29,55 +37,43 @@ class TransferController {
             const transfer = await service.findOne(params.id, user.id)
             if(!transfer) throw boom.notFound('transfer not found')
 
-            res.status(200).json(transfer.dataValues)
+            res.status(200).json(transfer)
         } catch(error) {
             next(error)
         }
     }
 
-    async findByAccountNumber(req, res, next) {
-        const { body, user } = req
-        try {
-            const transfer = await service.findByAccountNumber(body.account_number, user.id)
-            if(!transfer) throw boom.notFound('transfer not found')
+    // async findByContact(req, res, next) {
+    //     const { body, user } = req
+    //     try {
+    //         const transfer = await service.findByContact(body.contact_id, user.id)
+    //         if(!transfer) throw boom.notFound('transfer not found')
 
-            res.status(200).json(transfer.dataValues)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByContact(req, res, next) {
-        const { body, user } = req
-        try {
-            const transfer = await service.findByContact(body.contact_id, user.id)
-            if(!transfer) throw boom.notFound('transfer not found')
-
-            res.status(200).json(transfer.dataValues)
-        } catch(error) {
-            next(error)
-        }
-    }
+    //         res.status(200).json(transfer)
+    //     } catch(error) {
+    //         next(error)
+    //     }
+    // }
 
     async findByStandBy(req, res, next) {
-        const { body, user } = req
+        const { user } = req
         try {
-            const transfer = await service.findByStandBy(body.standby, user.id)
+            const transfer = await service.findByStandBy(true, user.id)
             if(!transfer) throw boom.notFound('transfer not found')
 
-            res.status(200).json(transfer.dataValues)
+            res.status(200).json(transfer)
         } catch(error) {
             next(error)
         }
     }
 
     async findByIncome(req, res, next) {
-        const { body, user } = req
+        const { user } = req
         try {
-            const transfer = await service.findByIncome(body.is_income, user.id)
+            const transfer = await service.findByIncome(true, user.id)
             if(!transfer) throw boom.notFound('transfer not found')
 
-            res.status(200).json(transfer.dataValues)
+            res.status(200).json(transfer)
         } catch(error) {
             next(error)
         }
@@ -90,7 +86,7 @@ class TransferController {
             if(!transferExist) throw boom.notFound('transfer not found')
 
             const transfer = await service.updateOne(id, req.body)
-            res.status(201).json(transfer.dataValues)
+            res.status(201).json(transfer)
         } catch(error) {
             next(error)
         }

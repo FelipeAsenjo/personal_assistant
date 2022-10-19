@@ -3,17 +3,19 @@ const { Model, DataTypes, Sequelize } = require('sequelize')
 const TRANSFER_TABLE = 'transfers'
 
 const TransferSchema = {
-  from_account_id: {
+  id: {
     primaryKey: true,
     allowNull: false,
     unique: true,
     type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+    defaultValue: DataTypes.UUIDV4
   },
-  to_account_id: {
+  user_account_id: {
     allowNull: false,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
+  other_account_id: DataTypes.UUID,
+  service: DataTypes.STRING(50),
   is_income: {
     allowNull: false,
     type: DataTypes.BOOLEAN,
@@ -49,7 +51,7 @@ const TransferSchema = {
 
 class Transfer extends Model {
   static associate(models) {
-    this.belongsTo(models.BankAccount, { as: 'from_account', foreignKey: 'from_account_id' })
+    this.belongsTo(models.BankAccount, { as: 'user_account', foreignKey: 'user_account_id' })
   }
 
   static config(sequelize) {
@@ -61,7 +63,7 @@ class Transfer extends Model {
       paranoid: true,
       indexes: [
         {
-          fields: ['from_account_id', 'to_account_id']
+          fields: ['user_account_id', 'other_account_id']
         }
       ]
     }

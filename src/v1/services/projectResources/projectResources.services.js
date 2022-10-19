@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { Project } = require('../../../libs/sequelize/models/projects.model')
 const { models } = sequelize
 
 class ProjectResourcesService {
@@ -13,13 +14,13 @@ class ProjectResourcesService {
     async findAll(user_id, project_id) {
         const resources = await models.ProjectResources.findAll({
             where: { '$project.user_id$': user_id, project_id },
-            include: 'project'
+            include: {
+                model: Project,
+                as: 'project',
+                attributes: ['id', 'title']
+            }
         })
-        const resourcesWithoutProject = resources.map(resource => {
-            const { project, ...withoutProject } = resource.dataValues
-            return withoutProject
-        })
-        return resourcesWithoutProject
+        return resources
     }
 
     async findOne(id, user_id, project_id) {

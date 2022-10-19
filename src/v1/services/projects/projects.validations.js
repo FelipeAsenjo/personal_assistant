@@ -3,18 +3,18 @@ const Joi = require('joi')
 const id = Joi.string().guid()
 const title = Joi.string().max(100)
 const description = Joi.string()
-const thoughts = Joi.string()
+const conclusions = Joi.string()
 
 const createProjectSchema = Joi.object({                                                       
   title: title.required(),
   description,
-  thoughts,
+  conclusions,
 })
 
 const updateProjectSchema = Joi.object({                                                       
   title,
   description,
-  thoughts,
+  conclusions,
 })
 
 const getProjectSchema = Joi.object({

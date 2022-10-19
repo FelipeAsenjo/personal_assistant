@@ -20,6 +20,7 @@ const AddressSchema = {
     type: DataTypes.SMALLINT
   },
   apartment: DataTypes.STRING(20),
+  suburb: DataTypes.STRING(100),
   city: DataTypes.STRING(100),
   state: DataTypes.STRING(100),
   country: DataTypes.STRING(100),
