@@ -1,7 +1,6 @@
 const boom = require('@hapi/boom')
 const PeopleService = require('./people.services')
 const { searchByMulti } = require('../../../utils/finders.utils')
-// person finders are commented, check before test
 
 const service = new PeopleService()
 
@@ -16,8 +15,9 @@ class PeopleController {
     }
 
     async findAll(req, res, next) {
+        const { query } = req
         try {
-            const people = await service.findAll()
+            const people = await service.findAll(query)
             res.status(200).json(people)
         } catch(error) {
             next(error)
@@ -72,34 +72,5 @@ class PeopleController {
         }
     }
 }
-
-// const searchByMulti = async (body) => {
-//     const { rut, last_name, name } = body
-//     const personExist = async () => {
-//         try {
-//             if(rut) {
-//                 const personByRut = await service.findByRut(rut)
-//                 if(!personByRut) throw boom.notFound('person not found')
-//                 return personByRut
-//             } 
-//             if(last_name) {
-//                 const personByLastName = await service.findByLastName(last_name)
-//                 if(!personByLastName) throw boom.notFound('person not found')
-//                 return personByLastName
-//             } 
-//             if(name) {
-//                 const personByName = await service.findByAlias(name)
-//                 if(!personByName) throw boom.notFound('person not found')
-//                 return personByName
-//             } 
-
-//             return false
-//         } catch(error) {
-//             next(error)
-//         }
-//     }
-
-//     return personExist()
-// }
 
 module.exports = PeopleController

@@ -15,8 +15,9 @@ class ProjectController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const projects = await service.findAll(req.user.id)
+            const projects = await service.findAll(query, user.id)
             res.status(200).json(projects)
         } catch(error) {
             next(error)
@@ -27,18 +28,6 @@ class ProjectController {
         const { params, user } = req
         try {
             const project = await service.findOne(params.id, user.id)
-            if(!project) throw boom.notFound('project not found')
-
-            res.status(200).json(project)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByProjectName(req, res, next) {
-        const { body, user } = req
-        try {
-            const project = await service.findByProjectName(body.title, user.id)
             if(!project) throw boom.notFound('project not found')
 
             res.status(200).json(project)

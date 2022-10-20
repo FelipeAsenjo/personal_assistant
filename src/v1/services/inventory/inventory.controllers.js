@@ -15,8 +15,9 @@ class InventoryController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const inventory = await service.findAll(req.user.id)
+            const inventory = await service.findAll(query, user.id)
             res.status(200).json(inventory)
         } catch(error) {
             next(error)

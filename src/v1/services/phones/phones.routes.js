@@ -37,11 +37,4 @@ router.delete('/:id',
 
 router.post('/findMyOwn', controller.findMyOwn)
 
-router.post('/findByContact', controller.findByContact)
-
-router.post('/findByNumber', 
-    validatorHandler(updatePhonesSchema, 'body'),
-    controller.findByNumber
-)
-
 module.exports = router

@@ -23,8 +23,9 @@ class SocialMediaController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const socialMedia = await service.findAll(req.user.id)
+            const socialMedia = await service.findAll(query, user.id)
             res.status(200).json(socialMedia)
         } catch(error) {
             next(error)
@@ -46,35 +47,6 @@ class SocialMediaController {
     async findMyOwn(req, res, next) {
         try {
             const socialMedia = await service.findMyOwn(req.user.id)
-            if(!socialMedia) throw boom.notFound('social media not found')
-
-            res.status(200).json(socialMedia)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByUsername(req, res, next) {
-        const { body, user } = req
-        try {
-            const socialMedia = await service.findByUsername(body.username, user.id)
-            if(!socialMedia) throw boom.notFound('social media not found')
-
-            res.status(200).json(socialMedia)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByContact(req, res, next) {
-        const { body, user, params, fromContact } = req
-
-        const contactId = fromContact ?
-            params.contact_id :
-            body.contact_id
-
-        try {
-            const socialMedia = await service.findByContact(contactId, user.id)
             if(!socialMedia) throw boom.notFound('social media not found')
 
             res.status(200).json(socialMedia)

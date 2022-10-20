@@ -9,8 +9,9 @@ class PeopleService {
         return newPerson
     }
 
-    async findAll() {
+    async findAll(query) {
         const people = await models.Person.findAll({
+            where: query,
             include: ['user', 'contact']
         })
         return people

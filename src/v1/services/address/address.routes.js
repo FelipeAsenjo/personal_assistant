@@ -39,8 +39,4 @@ router.post('/findMyOwn',
     controller.findMyOwn
 )
 
-router.post('/findByContact', 
-    controller.findByContact
-)
-
 module.exports = router

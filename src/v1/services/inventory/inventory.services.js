@@ -8,9 +8,9 @@ class InventoryService {
         return newItem
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const inventory = await models.Inventory.findAll({
-            where: { user_id }
+            where: { ...query, user_id }
         })
         return inventory
     }
@@ -21,16 +21,6 @@ class InventoryService {
         })
         return item
     }
- 
-    async findItemByName(item_name, user_id) {
-        const item = await models.Inventory.findAll({
-            where: { 
-                item_name: { [Op.like]: `%${item_name}%` }, 
-                user_id 
-            }
-        })
-        return item
-    }   
 
     async updateOne(id, changes) {
         const item = await models.Inventory.findByPk(id)

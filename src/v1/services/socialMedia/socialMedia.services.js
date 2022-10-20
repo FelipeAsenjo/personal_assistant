@@ -38,9 +38,9 @@ class SocialMediaService {
         return newSocialMedia
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const socialMedia = await models.SocialMedia.findAll({
-            where: { '$contact.user_id$': user_id },
+            where: { '$contact.user_id$': user_id, ...query },
             include: includeContact(includePerson)
         })
         return socialMedia
@@ -58,25 +58,6 @@ class SocialMediaService {
         const socialMedia = await models.SocialMedia.findAll({
             where: { user_id },
             include: includeUser(includePerson)
-        })
-        return socialMedia
-    }
-
-    async findByUsername(username, user_id) {
-        const socialMedia = await models.SocialMedia.findAll({
-            where: { 
-                '$contact.user_id$': user_id, 
-                username: { [Op.like]: `%${username}%` } 
-            },
-            include: includeContact(includePerson)
-        })
-        return socialMedia
-    }
-
-    async findByContact(contact_id, user_id) {
-        const socialMedia = await models.SocialMedia.findAll({
-            where: { '$contact.user_id$': user_id, contact_id },
-            include: includeContact(includePerson)
         })
         return socialMedia
     }

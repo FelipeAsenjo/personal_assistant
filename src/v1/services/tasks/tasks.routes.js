@@ -35,14 +35,4 @@ router.delete('/:id',
     controller.deleteOne
 )
 
-router.post('/findByActive', 
-    validatorHandler(updateTaskSchema, 'body'),
-    controller.findByActive
-)
-
-router.post('/findByTitle', 
-    validatorHandler(updateTaskSchema, 'body'),
-    controller.findByTitle
-)
-
 module.exports = router

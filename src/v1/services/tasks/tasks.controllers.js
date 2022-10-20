@@ -15,8 +15,9 @@ class TaskController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const tasks = await service.findAll(req.user.id)
+            const tasks = await service.findAll(query, user.id)
             res.status(200).json(tasks)
         } catch(error) {
             next(error)
@@ -27,29 +28,6 @@ class TaskController {
         const { params, user } = req
         try {
             const task = await service.findOne(params.id, user.id)
-            if(!task) throw boom.notFound('task not found')
-
-            res.status(200).json(task)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByTitle(req, res, next) {
-        const { body, user } = req
-        try {
-            const task = await service.findByTitle(body.title, user.id)
-            if(!task) throw boom.notFound('task not found')
-
-            res.status(200).json(task)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByActive(req, res, next) {
-        try {
-            const task = await service.findByActive(req.user.id)
             if(!task) throw boom.notFound('task not found')
 
             res.status(200).json(task)

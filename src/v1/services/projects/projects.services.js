@@ -10,9 +10,9 @@ class ProjectService {
         return newProject
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const projects = await models.Project.findAll({
-            where: { user_id },
+            where: { ...query, user_id },
             include: ['tasks', 'resources']
         })
         return projects
@@ -25,16 +25,6 @@ class ProjectService {
         })
         return project
     }
- 
-    async findByProjectName(title, user_id) {
-        const project = await models.Project.findAll({
-            where: { 
-                title: { [Op.like]: `%${title}%` }, 
-                user_id 
-            }
-        })
-        return project
-    }   
 
     async updateOne(id, changes) {
         const project = await models.Project.findByPk(id)

@@ -37,14 +37,4 @@ router.delete('/:id',
 
 router.post('/findMyOwn', controller.findMyOwn)
 
-router.post('/findByContact',
-    validatorHandler(updateBankAccountSchema, 'body'),
-    controller.findByContact
-)
-
-router.post('/findByAccountNumber',
-    validatorHandler(updateBankAccountSchema, 'body'),
-    controller.findByAccountNumber
-)
-
 module.exports = router

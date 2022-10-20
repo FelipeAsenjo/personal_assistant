@@ -25,8 +25,9 @@ class ContactController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const contacts = await service.findAll(req.user.id)
+            const contacts = await service.findAll(query, user.id)
             res.status(200).json(contacts)
         } catch(error) {
             next(error)
@@ -39,18 +40,6 @@ class ContactController {
             const contact = id ?
                 await service.findOne(id, req.user.id) : 
                 await this.findContact(req.body, req.user.id)
-            if(!contact) throw boom.notFound('contact not found')
-
-            res.status(200).json(contact)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findContact(req, res, next) {
-        const { body, user } = req
-        try {
-            const contact = await searchByMulti(service, body.person, user.id)
             if(!contact) throw boom.notFound('contact not found')
 
             res.status(200).json(contact)

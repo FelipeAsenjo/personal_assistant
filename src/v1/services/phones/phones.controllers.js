@@ -23,8 +23,9 @@ class PhoneController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const phones = await service.findAll(req.user.id)
+            const phones = await service.findAll(query, user.id)
             res.status(200).json(phones)
         } catch(error) {
             next(error)
@@ -46,35 +47,6 @@ class PhoneController {
     async findMyOwn(req, res, next) {
         try {
             const phones = await service.findMyOwn(req.user.id)
-            if(!phones) throw boom.notFound('phone not found')
-
-            res.status(200).json(phones)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByContact(req, res, next) {
-        const { body, user, params, fromContact } = req
-
-        const contactId = fromContact ?
-            params.contact_id :
-            body.contact_id
-
-        try {
-            const phones = await service.findByContact(contactId, user.id)
-            if(!phones) throw boom.notFound('phone not found')
-
-            res.status(200).json(phones)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByNumber(req, res, next) {
-        const { body, user } = req
-        try {
-            const phones = await service.findByNumber(body.number, user.id)
             if(!phones) throw boom.notFound('phone not found')
 
             res.status(200).json(phones)

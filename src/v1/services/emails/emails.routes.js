@@ -37,8 +37,4 @@ router.delete('/:id',
 
 router.post('/findMyOwn', controller.findMyOwn)
 
-router.post('/findByContact', controller.findByContact)
-
-router.post('/findByAddress', controller.findByAddress)
-
 module.exports = router

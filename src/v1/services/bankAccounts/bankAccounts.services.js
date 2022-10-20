@@ -36,9 +36,9 @@ class BankAccountService {
         return newBankAccount
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const bankAccounts = await models.BankAccount.findAll({
-            where: { '$contact.user_id$': user_id },
+            where: { '$contact.user_id$': user_id, ...query },
             include: includeContact(includePerson)
         })
         return bankAccounts
@@ -71,32 +71,6 @@ class BankAccountService {
         })
         return bankAccount
     }   
-
-    // async findByRut(rut, user_id) {
-    //     const bankAccount = await models.BankAccount.findAll({
-    //         where: { '$contact.user_id$': user_id },
-    //         include: {
-    //             model: Contact,
-    //             as: 'contact',
-    //             attributes: contactAttributes,
-    //             include: {
-    //                 model: Person,
-    //                 as: 'person',
-    //                 attributes: personAttributes,
-    //                 where: { rut }
-    //             }
-    //         }
-    //     })
-    //     return bankAccount
-    // }
-
-    async findByContact(contact_id, user_id) {
-        const bankAccount = await models.BankAccount.findAll({
-            where: { '$contact.user_id$': user_id, contact_id },
-            include: includeContact(includePerson)
-        })
-        return bankAccount
-    }
 
     async updateOne(id, changes) {
         const bankAccount = await models.BankAccount.findByPk(id)

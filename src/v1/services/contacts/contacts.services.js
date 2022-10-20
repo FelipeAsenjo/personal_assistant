@@ -10,9 +10,9 @@ class ContactService {
         return newContact
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const contacts = await models.Contact.findAll({
-            where: { user_id },
+            where: { ...query, user_id },
             include: 'person'
         })
         return contacts
@@ -21,33 +21,6 @@ class ContactService {
     async findOne(id, user_id) {
         const contact = await models.Contact.findByPk(id, {
             where: { user_id },
-            include: 'person'
-        })
-        return contact
-    }
- 
-    async findByRut(rut, user_id) {
-        const contact = await models.Contact.findOne({
-            where: { '$person.rut$': rut, user_id },
-            include: 'person'
-        })
-        return contact
-    }
-
-    async findByAlias(alias, user_id) {
-        const contact = await models.Contact.findAll({
-            where: { 
-                alias: { [Op.like]: `%${alias}%` }, 
-                user_id 
-            },
-            include: 'person'
-        })
-        return contact
-    }      
-
-    async findByEmail(email, user_id) {
-        const contact = await models.Contact.findOne({
-            where: { '$emails.address$': email, user_id },
             include: 'person'
         })
         return contact

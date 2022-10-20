@@ -37,11 +37,4 @@ router.delete('/:id',
 
 router.post('/findMyOwn', controller.findMyOwn)
 
-router.post('/findByUsername', 
-    validatorHandler(updateSocialMediaSchema, 'body'),
-    controller.findByUsername
-)
-
-router.post('/findByContact', controller.findByContact)
-
 module.exports = router

@@ -23,8 +23,9 @@ class UserController {
     }
 
     async findAll(req, res, next) {
+        const { query } = req
         try {
-            const users = await service.findAll()
+            const users = await service.findAll(query)
             res.status(200).json(users)
         } catch(error) {
             next(error)
@@ -35,19 +36,6 @@ class UserController {
         try {
             const { id } = req.params
             const user = await service.findOne(id)
-            if(!user) throw boom.notFound('user not found')
-
-            const {password, ...userWithoutPassword} = user.dataValues
-            res.status(200).json(userWithoutPassword)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByRut(req, res, next) {
-        const { person } = req.body
-        try {
-            const user = await service.findByRut(person.rut)
             if(!user) throw boom.notFound('user not found')
 
             const {password, ...userWithoutPassword} = user.dataValues

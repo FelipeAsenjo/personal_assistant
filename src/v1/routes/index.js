@@ -25,11 +25,7 @@ const projectsPath = '/projects/:project_id'
 const bankAccountsPath = '/bankAccounts/:user_account_id'
 
 router.use('/auth', auth)
-router.use('/users', 
-    // isAuthenticated,
-    // hasRole([0, 1]),
-    users
-)
+router.use('/users', isAuthenticated, hasRole([0, 1]), users)
 router.use(`/address`, isAuthenticated, address)
 router.use(`${contactsPath}/address`, isAuthenticated, comesFromContact, address)
 router.use(`/bankAccounts`, isAuthenticated, bankAccounts)
@@ -38,7 +34,7 @@ router.use(`/contacts`, isAuthenticated, contacts)
 router.use(`/emails`, isAuthenticated, emails)
 router.use(`${contactsPath}/emails`, isAuthenticated, comesFromContact, emails)
 router.use(`/inventory`, isAuthenticated, inventory)
-router.use(`/people`, isAuthenticated, people)
+router.use(`/people`, isAuthenticated, hasRole([0]), people)
 router.use(`/phones`, isAuthenticated, phones)
 router.use(`${contactsPath}/phones`, isAuthenticated, comesFromContact, phones)
 router.use(`/projects`, isAuthenticated, projects)

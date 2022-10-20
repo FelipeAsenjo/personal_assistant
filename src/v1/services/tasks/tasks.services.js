@@ -8,9 +8,9 @@ class TaskService {
         return newTask
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const tasks = await models.Task.findAll({
-            where: { user_id }
+            where: { ...query, user_id }
         })
         return tasks
     }
@@ -21,24 +21,7 @@ class TaskService {
         })
         return task
     }
- 
-    async findByTitle(title, user_id) {
-        const task = await models.Task.findAll({
-            where: { 
-               title: { [Op.like]: `%${title}%`}, 
-               user_id 
-            }
-        })
-        return task
-    }   
-
-    async findByActive(user_id) {
-        const task = await models.Task.findAll({
-            where: { user_id, done: false }
-        })
-        return task
-    }   
-    
+   
     async updateOne(id, changes) {
         const task = await models.Task.findByPk(id)
         const updatedTask = await task.update(changes)

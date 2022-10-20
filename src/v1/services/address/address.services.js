@@ -36,9 +36,9 @@ class AddressService {
         return ownerAddress
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const addresses = await models.Address.findAll({
-            where: { '$contact.user_id$': user_id },
+            where: { '$contact.user_id$': user_id, ...query },
             include: includeContact(includePerson)
         })
         return addresses
@@ -58,43 +58,6 @@ class AddressService {
             include: includeUser(includePerson)
         })
         return addresses
-    }
-
-    async findByContact(contact_id, user_id) {
-        const address = await models.Address.findAll({
-            where: { '$contact.user_id$': user_id, contact_id },
-            include: includeContact(includePerson)
-        })
-        return address
-    }
-
-    async findByRut(rut, user_id) {
-        const address = await models.Address.findOne({
-            where: { '$person.rut$': rut, user_id },
-            include: includeContact(includePerson)
-        })
-        return address
-    }
-
-    async findByAlias(alias, user_id) {
-        const address = await models.Address.findAll({
-            where: { 
-                [Op.and]: {
-                    '$contact.alias$': { [Op.like]: `%${alias}%` }, 
-                    '$contact.user_id$': user_id 
-                }
-            },
-            include: includeContact(includePerson)
-        })
-        return address
-    }      
-
-    async findByEmail(email, user_id) {
-        const address = await models.Address.findOne({
-            where: { '$emails.address$': email, user_id },
-            include: includeContact(includePerson)
-        })
-        return address
     }
 
     async updateOne(id, changes) {

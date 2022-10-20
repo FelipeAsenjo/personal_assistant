@@ -6,7 +6,6 @@ const service = new EmailService()
 class EmailController {
     async create(req, res, next) {
         const { body, user, params, fromContact } = req
-
         const data = fromContact ? 
             { ...body, contact_id: params.contact_id } :
             { ...body, user_id: user.id } 
@@ -23,8 +22,9 @@ class EmailController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const emails = await service.findAll(req.user.id)
+            const emails = await service.findAll(query, user.id)
             res.status(200).json(emails)
         } catch(error) {
             next(error)
@@ -46,35 +46,6 @@ class EmailController {
     async findMyOwn(req, res, next) {
         try {
             const email = await service.findMyOwn(req.user.id)
-            if(!email) throw boom.notFound('email not found')
-
-            res.status(200).json(email)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByAddress(req, res, next) {
-        const { user, body } = req
-        try {
-            const email = await service.findByAddress(body.address, user.id)
-            if(!email) throw boom.notFound('email not found')
-
-            res.status(200).json(email)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByContact(req, res, next) {
-        const { user, body, params, fromContact } = req
-
-        const contactId = fromContact ?
-            params.contact_id :
-            body.contact_id
-
-        try {
-            const email = await service.findByContact(contactId, user.id)
             if(!email) throw boom.notFound('email not found')
 
             res.status(200).json(email)

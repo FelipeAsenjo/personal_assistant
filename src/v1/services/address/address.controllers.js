@@ -21,8 +21,9 @@ class AddressController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const addresses = await service.findAll(req.user.id)
+            const addresses = await service.findAll(query, user.id)
             res.status(200).json(addresses)
         } catch(error) {
             next(error)
@@ -44,24 +45,6 @@ class AddressController {
     async findMyOwn(req, res, next) {
         try {
             const addresses = await service.findMyOwn(req.user.id)
-            if(!addresses) throw boom.notFound('address not found')
-
-            res.status(200).json(addresses)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByContact(req, res, next) {
-        const { body, user, fromContact, params } = req
-
-        const contactId = fromContact ?
-            params.contact_id :
-            body.contact_id
-
-        try {
-            // const addresses = await searchByMulti(service, body.person, user.id)
-            const addresses = await service.findByContact(contactId, user.id)
             if(!addresses) throw boom.notFound('address not found')
 
             res.status(200).json(addresses)

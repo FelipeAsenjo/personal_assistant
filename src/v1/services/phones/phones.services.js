@@ -37,9 +37,9 @@ class PhoneService {
         return newPhone
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const phones = await models.Phone.findAll({
-            where: { '$contact.user_id$': user_id },
+            where: { '$contact.user_id$': user_id, ...query },
             include: includeContact(includePerson)
         })
         return phones
@@ -60,22 +60,6 @@ class PhoneService {
         })
         return phones
     }
-
-    async findByContact(contact_id, user_id) {
-        const phone = await models.Phone.findAll({
-            where: { '$contact.user_id$': user_id, contact_id },
-            include: includeContact(includePerson)
-        })
-        return phone
-    }
-
-    async findByNumber(number, user_id) {
-        const phone = await models.Phone.findOne({
-            where: { '$contact.user_id$': user_id, number },
-            include: includeContact(includePerson)
-        })
-        return phone
-    }   
 
     async updateOne(id, changes) {
         const phone = await models.Phone.findByPk(id)

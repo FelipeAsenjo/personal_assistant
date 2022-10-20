@@ -16,7 +16,8 @@ const isAuthenticated = (req, res, next) => {
 
 const hasRole = (allowedRoles) => {
     return (req, res, next) => {
-        const isAuthorized = allowedRoles.includes(req.user.role)
+        const { role } = req.user
+        const isAuthorized = allowedRoles.includes(Number(role))
         if(!isAuthorized) throw boom.forbidden('jwt is invalid or expired')
 
         next()

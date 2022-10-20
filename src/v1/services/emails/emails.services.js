@@ -38,9 +38,9 @@ class EmailService {
         return newEmail
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const emails = await models.Email.findAll({
-            where: { '$contact.user_id$': user_id },
+            where: { '$contact.user_id$': user_id, ...query },
             include: includeContact(includePerson)
         })
         return emails
@@ -63,21 +63,12 @@ class EmailService {
     }
 
     async findByAddress(address, user_id) {
-        const email = await models.Email.findAll({
-            where: { 
-                '$contact.user_id$': user_id, 
-                address: { [Op.like]: `%${address}%` }
-            },
+        console.log(address)
+        const email = await models.Email.findOne({
+            where: { '$contact.user_id$': user_id, address },
             include: includeContact(includePerson)
         })
-        return email
-    }
-
-    async findByContact(contact_id, user_id) {
-        const email = await models.Email.findAll({
-            where: { '$contact.user_id$': user_id, contact_id },
-            include: includeContact(includePerson)
-        })
+        console.log(email)
         return email
     }
 

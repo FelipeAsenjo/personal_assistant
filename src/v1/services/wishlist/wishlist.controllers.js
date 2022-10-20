@@ -15,8 +15,9 @@ class WishlistController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const wishes = await service.findAll(req.user.id)
+            const wishes = await service.findAll(query, user.id)
             res.status(200).json(wishes)
         } catch(error) {
             next(error)
@@ -34,30 +35,7 @@ class WishlistController {
             next(error)
         }
     }
-
-    async findByItemName(req, res, next) {
-        const { body, user } = req
-        try {
-            const wish = await service.findByItemName(body.item_name, user.id)
-            if(!wish) throw boom.notFound('wish not found')
-
-            res.status(200).json(wish)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByFavorite(req, res, next) {
-        try {
-            const wish = await service.findByFavorite(req.user.id)
-            if(!wish) throw boom.notFound('wish not found')
-
-            res.status(200).json(wish)
-        } catch(error) {
-            next(error)
-        }
-    }
-
+    
     async updateOne(req, res, next) {
         const { params, user } = req
         try {

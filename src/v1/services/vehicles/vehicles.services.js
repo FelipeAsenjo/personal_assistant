@@ -37,9 +37,9 @@ class VehicleService {
         return newVehicle
     }
 
-    async findAll(user_id) {
+    async findAll(query, user_id) {
         const vehicles = await models.Vehicle.findAll({
-            where: { '$contact.user_id$': user_id },
+            where: { '$contact.user_id$': user_id, ...query },
             include: includeContact(includePerson)
         })
         return vehicles
@@ -59,22 +59,6 @@ class VehicleService {
             include: includeUser(includePerson)
         })
         return vehicles
-    }
-
-    async findByPlateNumber(plate_number, user_id) {
-        const vehicle = await models.Vehicle.findOne({
-            where: { '$contact.user_id$': user_id, plate_number },
-            include: includeContact(includePerson)
-        })
-        return vehicle
-    }   
-
-    async findByContact(contact_id, user_id) {
-        const vehicle = await models.Vehicle.findAll({
-            where: { '$contact.user_id$': user_id, contact_id },
-            include: includeContact(includePerson)
-        })
-        return vehicle
     }
 
     async updateOne(id, changes) {

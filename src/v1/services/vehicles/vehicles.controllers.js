@@ -20,8 +20,9 @@ class VehicleController {
     }
 
     async findAll(req, res, next) {
+        const { query, user } = req
         try {
-            const vehicles = await service.findAll(req.user.id)
+            const vehicles = await service.findAll(query, user.id)
             res.status(200).json(vehicles)
         } catch(error) {
             next(error)
@@ -43,35 +44,6 @@ class VehicleController {
     async findMyOwn(req, res, next) {
         try {
             const vehicle = await service.findMyOwn(req.user.id)
-            if(!vehicle) throw boom.notFound('vehicle not found')
-
-            res.status(200).json(vehicle)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByPlateNumber(req, res, next) {
-        const { body, user } = req
-        try {
-            const vehicle = await service.findByPlateNumber(body.plate_number, user.id)
-            if(!vehicle) throw boom.notFound('vehicle not found')
-
-            res.status(200).json(vehicle)
-        } catch(error) {
-            next(error)
-        }
-    }
-
-    async findByContact(req, res, next) {
-        const { body, user, fromContact, params } = req
-
-        const contactId = fromContact ?
-            params.contact_id :
-            body.contact_id
-
-        try {
-            const vehicle = await service.findByContact(contactId, user.id)
             if(!vehicle) throw boom.notFound('vehicle not found')
 
             res.status(200).json(vehicle)

@@ -35,9 +35,4 @@ router.delete('/:id',
     controller.deleteOne
 )
 
-router.post('/findByName', 
-    validatorHandler(updateInventorySchema, 'body'),
-    controller.findItemByName
-)
-
 module.exports = router

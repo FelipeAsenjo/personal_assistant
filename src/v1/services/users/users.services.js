@@ -1,3 +1,4 @@
+const { query } = require('express')
 const { sequelize } = require('../../../libs/sequelize/connection')
 const { models } = sequelize
 
@@ -9,29 +10,16 @@ class UserService {
         return newUser
     }
 
-    async findAll() {
-        const users = await models.User.findAll({include: 'person'})
+    async findAll(query) {
+        const users = await models.User.findAll({
+            where: query,
+            include: 'person'
+        })
         return users
     }
 
     async findOne(id) {
         const user = await models.User.findByPk(id, {include: 'person'})
-        return user
-    }
- 
-    async findByUsername(username) {
-        const user = await models.User.findOne({
-            where: { username },
-            include: 'person'
-        })
-        return user
-    }   
-
-    async findByRut(rut) {
-        const user = await models.User.findOne({
-            where: { '$person.rut$': rut },
-            include: 'person'
-        })
         return user
     }
 
