@@ -62,6 +62,17 @@ class SocialMediaService {
         return socialMedia
     }
 
+    async findByUsername(username, user_id) {
+        const socialMedia = await models.SocialMedia.findOne({
+            where: { 
+                '$contact.user_id$': user_id, 
+                username 
+            },
+            include: includeContact(includePerson)
+        })
+        return socialMedia
+    }
+
     async updateOne(id, changes) {
         const socialMedia = await models.SocialMedia.findByPk(id)
         const updatedSocialMedia = await socialMedia.update(changes)

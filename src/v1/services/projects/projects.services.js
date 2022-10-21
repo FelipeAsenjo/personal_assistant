@@ -1,6 +1,11 @@
 const { Op } = require('sequelize')
 const { sequelize } = require('../../../libs/sequelize/connection')
+const { ProjectResources } = require('../../../libs/sequelize/models/projectResources.model')
+const { Task } = require('../../../libs/sequelize/models/tasks.model')
 const { models } = sequelize
+
+const taskAttributes = ['id', 'title', 'description', 'done']
+const resourcesAttributes = ['id', 'title', 'description', 'link']
 
 class ProjectService {
     async create(data) {
@@ -13,7 +18,17 @@ class ProjectService {
     async findAll(query, user_id) {
         const projects = await models.Project.findAll({
             where: { ...query, user_id },
-            include: ['tasks', 'resources']
+            include: [
+                {
+                    model: Task,
+                    as: 'tasks',
+                    attributes: taskAttributes
+                }, {
+                    model: ProjectResources,
+                    as: 'resources',
+                    attributes: resourcesAttributes
+                }
+            ]
         })
         return projects
     }
@@ -21,7 +36,17 @@ class ProjectService {
     async findOne(id, user_id) {
         const project = await models.Project.findByPk(id, {
             where: { user_id },
-            include: ['tasks', 'resources']
+            include: [
+                {
+                    model: Task,
+                    as: 'tasks',
+                    attributes: taskAttributes
+                }, {
+                    model: ProjectResources,
+                    as: 'resources',
+                    attributes: resourcesAttributes
+                }
+            ]
         })
         return project
     }

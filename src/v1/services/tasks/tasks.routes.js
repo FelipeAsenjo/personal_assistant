@@ -7,7 +7,7 @@ const {
     getTaskSchema
 } = require('./tasks.validations')
 
-const router = express.Router()
+const router = express.Router({mergeParams: true})
 const controller = new TaskController()
 
 router.get('/', 

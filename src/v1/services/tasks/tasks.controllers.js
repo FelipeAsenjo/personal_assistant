@@ -5,9 +5,16 @@ const service = new TaskService()
 
 class TaskController {
     async create(req, res, next) {
-        const { body, user } = req
+        const { body, user, fromProject, params } = req
+
+        console.log(fromProject)
+        const data = fromProject ? 
+            { ...body, project_id: params.project_id, user_id: user.id } :
+            { ...body, user_id: user.id } 
+        console.log(data)
+
         try {
-            const newTask = await service.create({ ...body, user_id: user.id })
+            const newTask = await service.create(data)
             res.status(201).json(newTask.dataValues)
         } catch(error) {
             next(error)

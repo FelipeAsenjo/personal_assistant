@@ -61,6 +61,14 @@ class PhoneService {
         return phones
     }
 
+    async findByNumber(number, user_id) {
+        const phone = await models.Phone.findOne({
+            where: { '$contact.user_id$': user_id, number },
+            include: includeContact(includePerson)
+        })
+        return phone
+    }  
+
     async updateOne(id, changes) {
         const phone = await models.Phone.findByPk(id)
         const updatedUser = await phone.update(changes)

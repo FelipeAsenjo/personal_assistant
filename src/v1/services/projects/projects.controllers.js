@@ -5,9 +5,10 @@ const service = new ProjectService()
 
 class ProjectController {
     async create(req, res, next) {
-        const { body, user } = req
+        const { body, user, fromProject, params } = req
+
         try {
-            const newproject = await service.create({ ...body, user_id: user.id })
+            const newproject = await service.create(data)
             res.status(201).json(newproject)
         } catch(error) {
             next(error)
