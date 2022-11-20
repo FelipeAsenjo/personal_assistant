@@ -21,7 +21,7 @@ const PhoneSchema = {
     unique: true,
     type: DataTypes.INTEGER
   },
-  tag: DataTypes.STRING(25)
+  tags: DataTypes.STRING(25)
 }
 
 class Phone extends Model {

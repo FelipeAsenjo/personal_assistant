@@ -1,5 +1,5 @@
-require('dotenv').config()
 const jwt = require('jsonwebtoken')
+const { JWT_KEY } = require('../config')
 const { 
     randomBytes,
     scryptSync, 
@@ -28,8 +28,7 @@ const verifyPass = (user, password) => {
 }
 
 const signToken = payload => {
-    const signedToken = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: maxAge }) 
-    console.log(maxAge)
+    const signedToken = jwt.sign(payload, JWT_KEY, { expiresIn: maxAge }) 
     return signedToken
 }
 

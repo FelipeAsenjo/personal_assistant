@@ -9,8 +9,9 @@ class UserController {
         console.log(req.baseUrl)
         const { body } = req
         try {
-            const userExist = await service.findByUsername(body.username)
-            if(userExist) throw boom.conflict('user already exist')
+            const userExist = await service.findAll({ username: body.username })
+            console.log(userExist.length)
+            if(userExist.length) throw boom.conflict('user already exist')
 
             body.password = encryptPass(body.password)
             const newUser = await service.create(body)

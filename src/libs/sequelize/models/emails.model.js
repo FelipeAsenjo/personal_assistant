@@ -17,7 +17,7 @@ const EmailSchema = {
     unique: true,
     type: DataTypes.STRING(200),
   },
-  tag: DataTypes.STRING(25),
+  tags: DataTypes.STRING(25),
 }
 
 class Email extends Model {

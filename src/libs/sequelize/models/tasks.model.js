@@ -14,11 +14,7 @@ const TaskSchema = {
     allowNull: false,
     type: DataTypes.UUID
   },
-  project_id: {
-    allowNull: true,
-    type: DataTypes.UUID,
-    defaultValue: null
-  },
+  project_id: DataTypes.UUID,
   title: {
     allowNull: false,
     type: DataTypes.STRING(100)

@@ -22,7 +22,7 @@ const SocialMediaSchema = {
     type: DataTypes.STRING(50),
   },
   link: DataTypes.STRING(150),
-  tag: DataTypes.STRING(25)
+  tags: DataTypes.STRING(25)
 }
 
 class SocialMedia extends Model {

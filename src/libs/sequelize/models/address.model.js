@@ -16,15 +16,13 @@ const AddressSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  number: {
-    type: DataTypes.SMALLINT
-  },
+  number: DataTypes.SMALLINT,
   apartment: DataTypes.STRING(20),
   suburb: DataTypes.STRING(100),
   city: DataTypes.STRING(100),
   state: DataTypes.STRING(100),
   country: DataTypes.STRING(100),
-  tag: DataTypes.STRING(25),
+  tags: DataTypes.STRING(25),
   updatedAt: {
     allowNull: false,
     type: Sequelize.DATE

@@ -33,7 +33,7 @@ const BankAccountSchema = {
     type: DataTypes.STRING(10),
     defaultValue: 'CLP'
   },
-  tag: DataTypes.STRING(25),
+  tags: DataTypes.STRING(25),
 }
 
 class BankAccount extends Model {
