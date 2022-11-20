@@ -60,7 +60,9 @@ class User extends Model {
       timestamps: true,
       paranoid: true,
       indexes: [
-        fields: ['username']
+        {
+          fields: ['username']
+        }
       ]
     }
   }

@@ -30,7 +30,7 @@ const InventorySchema = {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
-  specs: DataTypes.STRING
+  specs: DataTypes.STRING,
   tags: DataTypes.JSON,
   createdAt: {
     allowNull: false,
