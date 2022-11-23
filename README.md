@@ -1,20 +1,19 @@
 # Personal Assistant
----
 
 The **Personal Assistant** is an API created to store and retrieve my daily life personal information such as, *Contacts, Projects, Calendar, To-do's and Notes* among others.
 
 This project has been created with Docker to eliminate any possible incompatibility, with that said, if you want to try this project yourself you'll need a PostgreSQL instance running and ready to use (locally or remotely).
 
+
 ## Installation
----
 
 1. Copy this repository.
 2. Change the name *.env_example* file to *.env*.
 3. Populate your new *.env* file with your own **environment variables**.
 4. Run `yarn dev` or `docker-compose up` to build the image and initialize the project.
 
+
 ## Features
----
 
 - **CRUD** across every DB model.
 - 👦 Manage **users** & create isolated environments for each one of them.
